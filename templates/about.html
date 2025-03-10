@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>About Us</title>
+</head>
+<body>
+    <h1>About Our Bookstore</h1>
+    <p>Welcome to the Online Bookstore – your go-to resource for all things literary on campus!</p>
+    <p>We understand that as students, you have unique needs and preferences when it comes to accessing quality reading material.</p>
+    <h2>Our Mission</h2>
+    <p>Our mission is to provide an accessible and affordable platform for students to find textbooks, reference materials, and leisure reading options.</p>
+    <h2>Student Discounts</h2>
+    <p>We offer exclusive discounts for students on textbooks and bestsellers to help you save while you study! Don't forget to ask about our loyalty program and promotions!</p>
+    <h2>Study Groups and Events</h2>
+    <p>Join our community initiatives, including reading clubs and study groups, where you can collaborate with peers to enhance your learning experience.</p>
+    <p>For more information, don't hesitate to contact us or visit our social media pages. We're here to help you succeed!</p>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li><a href="{{ url_for('books') }}">Browse Books</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

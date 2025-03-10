@@ -1,0 +1,13 @@
+from flask_sqlalchemy import SQLAlchemy
+
+# Initialize the database
+db = SQLAlchemy()
+
+# Create the User model
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)  # Unique ID for each user
+    username = db.Column(db.String(120), unique=True, nullable=False)  # Username column
+    password = db.Column(db.String(60), nullable=False)  # Password column
+
+    def __repr__(self):
+        return f"User('{self.username}')"

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Home Page</title>
+</head>
+<body>
+    <h1>Welcome to the Online Bookstore</h1>
+    <p>Your one-stop destination for a wide range of books!</p>
+    <h2>Explore our sections:</h2>
+    <ul>
+        <li><a href="{{ url_for('about') }}">About Us</a></li>
+        <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+        <li><a href="{{ url_for('books') }}">Browse our Books</a></li>
+    </ul>
+    <h2>Your Books:</h2>
+    <ul>
+        {% for book in books %}
+            <li>{{ book.title }} by {{ book.author }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
