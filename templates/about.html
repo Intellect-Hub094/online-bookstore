@@ -1,27 +1,86 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background: #007bff;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .team-member {
+            text-align: center;
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .team-member:hover {
+            transform: scale(1.05);
+        }
+        .team-member img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+        .btn-custom {
+            background-color: #343a40;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #495057;
+        }
+    </style>
 </head>
 <body>
-    <h1>About Our Bookstore</h1>
-    <p>Welcome to the Online Bookstore – your go-to resource for all things literary on campus!</p>
-    <p>We understand that as students, you have unique needs and preferences when it comes to accessing quality reading material.</p>
-    <h2>Our Mission</h2>
-    <p>Our mission is to provide an accessible and affordable platform for students to find textbooks, reference materials, and leisure reading options.</p>
-    <h2>Student Discounts</h2>
-    <p>We offer exclusive discounts for students on textbooks and bestsellers to help you save while you study! Don't forget to ask about our loyalty program and promotions!</p>
-    <h2>Study Groups and Events</h2>
-    <p>Join our community initiatives, including reading clubs and study groups, where you can collaborate with peers to enhance your learning experience.</p>
-    <p>For more information, don't hesitate to contact us or visit our social media pages. We're here to help you succeed!</p>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            <li><a href="{{ url_for('contact') }}">Contact</a></li>
-            <li><a href="{{ url_for('books') }}">Browse Books</a></li>
-            <li><a href="{{ url_for('logout') }}">Logout</a></li>
-        </ul>
-    </nav>
+    <div class="header">
+        <h1>About Us</h1>
+        <p>Your one-stop solution for all your reading needs</p>
+    </div>
+    <div class="container mt-5">
+        <h2>Our Team</h2>
+        <p>Meet the people behind the scenes:</p>
+        <div class="row">
+            <div class="col-md-4 team-member">
+                <img src="https://via.placeholder.com/150" alt="Syabonga Nxuma">
+                <h4>Syabonga Nxuma</h4>
+                <p>Co-founder and CEO. A passionate literature lover aiming to make reading accessible.</p>
+            </div>
+            <div class="col-md-4 team-member">
+                <img src="https://via.placeholder.com/150" alt="Nosipho Ndwandwe">
+                <h4>Nosipho Ndwandwe</h4>
+                <p>Co-founder and COO. Manages daily operations ensuring a seamless experience.</p>
+            </div>
+            <div class="col-md-4 team-member">
+                <img src="https://via.placeholder.com/150" alt="Okuhle Jawe">
+                <h4>Okuhle Jawe</h4>
+                <p>Marketing Director. Focused on outreach and promoting our amazing book collection.</p>
+            </div>
+        </div>
+
+        <h2 class="mt-5">Our Mission</h2>
+        <p>Our mission is to promote reading culture and provide resources to help people discover the joy of literature.</p>
+
+        <h2 class="mt-5">Our Vision</h2>
+        <p>To be the leading online bookstore, where readers can find the books they love and discover new favorites.</p>
+
+        <a class="btn btn-custom mt-4" href="{{ url_for('index') }}">Back to Home</a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

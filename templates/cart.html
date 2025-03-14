@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+</head>
+<body>
+    <h1>Your Cart</h1>
+    <ul>
+        {% for book_id, quantity in cart_items.items() %}
+        <li>
+            Book ID: {{ book_id }} (Quantity: {{ quantity }})
+            <form action="{{ url_for('remove_from_cart', book_id=book_id) }}" method="post">
+                <button type="submit">Remove from Cart</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    <h3>Total Price: R{{ total_price }}</h3>
+    <a href="{{ url_for('checkout') }}">Proceed to Checkout</a>
+    <a href="{{ url_for('home') }}">Continue Shopping</a>
+</body>
+</html>

@@ -1,0 +1,24 @@
+@app.route('/admin/add_book', methods=['POST'])
+@login_required
+def add_book():
+    if not current_user.is_admin:
+        flash('You do not have permission to access this page.', 'error')
+        return redirect(url_for('index'))
+
+    form = AddBookForm()
+    form.category_id.choices = [(category.id, category.name) for category in Category.query.all()]
+
+    if form.validate_on_submit():
+        new_book = Book(
+            title=form.title.data,
+            author=form.author.data,
+            price=form.price.data,
+            category_id=form.category_id.data
+        )
+        db.session.add(new_book)
+        db.session.commit()
+        flash('Book added successfully!', 'success')
+    else:
+        flash('Failed to add book. Please check your inputs.', 'error')
+
+    return redirect(url_for('admin_dashboard'))

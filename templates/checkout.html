@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+</head>
+<body>
+    <h1>Checkout</h1>
+    <ul>
+        {% for book_id, quantity in cart_items.items() %}
+        <li>Book ID: {{ book_id }} (Quantity: {{ quantity }})</li>
+        {% endfor %}
+    </ul>
+    <h3>Total Price: R{{ total_price }}</h3>
+    <form method="post">
+        <button type="submit">Confirm Purchase</button>
+    </form>
+    <a href="{{ url_for('cart') }}">Go Back to Cart</a>
+</body>
+</html>
