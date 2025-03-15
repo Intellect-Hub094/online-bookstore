@@ -4,143 +4,154 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Online Bookstore</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMnHf5uWZp4Yp8NPn5ucP1wZwrKVpt7SQO4H8" crossorigin="anonymous">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #eaeaea;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
+            padding: 20px;
         }
         header {
-            background: #4CAF50;
+            background-color: #2c3e50;
             color: white;
             padding: 20px 0;
             text-align: center;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
         }
-        nav a {
-            margin: 0 15px;
+        .nav-buttons {
+            margin: 15px 0;
+        }
+        .button {
+            padding: 10px 15px;
+            background-color: #2980b9;
             color: white;
+            border: none;
+            border-radius: 5px;
             text-decoration: none;
+            display: inline-block;
+            margin: 5px 10px;
+            transition: background-color 0.3s;
         }
-        nav a:hover {
-            text-decoration: underline;
+        .button:hover {
+            background-color: #1a598d;
         }
-        .hero {
-            background-image: url('https://images.unsplash.com/photo-1602191381985-47a7e73b89f1'); /* Change as needed */
-            height: 300px;
-            background-size: cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .social-icons {
+            margin: 10px 0;
+        }
+        .social-icons a {
             color: white;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-            text-align: center;
+            margin: 0 10px;
+            font-size: 1.5em;
+            transition: color 0.3s;
         }
-        .hero h1 {
-            font-size: 3em;
-            margin: 0;
+        .social-icons a:hover {
+            color: #3498db;
         }
-        .container {
-            max-width: 900px;
-            margin: auto;
+        main {
+            max-width: 800px;
+            margin: 40px auto;
             padding: 20px;
-            text-align: center;
-        }
-        .book-display {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-        .book-card {
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        .highlight {
+            background-color: #f9f9f9;
             padding: 15px;
-            width: calc(30% - 40px);
-            transition: transform 0.2s;
+            border-left: 4px solid #2980b9;
+            margin: 15px 0;
         }
-        .book-card img {
-            max-width: 100%;
-            border-radius: 10px;
+        .image-section {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
         }
-        .book-card:hover {
-            transform: translateY(-5px);
+        .image-box {
+            flex: 1;
+            min-width: 200px;
+            margin: 10px;
+            position: relative;
+        }
+        .image-box img {
+            width: 100%;
+            border-radius: 8px;
+        }
+        .image-box .caption {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
         }
         footer {
             text-align: center;
-            padding: 20px;
-            background: #333;
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #2c3e50;
             color: white;
-        }
-        .socials {
-            margin: 10px 0;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Online Bookstore</h1>
-        <nav>
-            <a href="{{ url_for('categories') }}">Browse Categories</a>
-            <a href="{{ url_for('cart') }}">View Cart</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
-        </nav>
+        <h1>Welcome to Our Online Bookstore!</h1>
+        <div class="nav-buttons">
+            <a class="button" href="{{ url_for('select_faculty') }}">Select Faculty</a>
+            <a class="button" href="{{ url_for('logout') }}">Log Out</a>
+        </div>
+        <div class="social-icons">
+            <a href="https://www.facebook.com" target="_blank" class="fab fa-facebook-square"></a>
+            <a href="https://www.twitter.com" target="_blank" class="fab fa-twitter-square"></a>
+            <a href="https://www.instagram.com/onlinebookstore195?utm_source=qr&igsh=ZzVvOWJzc2RnaHNu" target="_blank" class="fab fa-instagram-square"></a>
+            <a href="https://www.linkedin.com" target="_blank" class="fab fa-linkedin"></a>
+        </div>
     </header>
-
-    <div class="hero">
-        <h1>Your Gateway to Endless Stories!</h1>
-    </div>
-
-    <div class="container">
-        <h2>Discover a Wide Range of Books!</h2>
-        <p>We offer an extensive collection of books across various genres. No matter what you're looking for, we have something for everyone, from breathtaking fiction to insightful non-fiction.</p>
-
-        <div class="book-display">
-            <div class="book-card">
-                <img src="https://images.unsplash.com/photo-1522722312833-bd6533cabb22?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDM5fHxib29rfGVufDB8fHx8MTYwMjE3NjQ1MQ&ixlib=rb-1.2.1&q=80&w=400" alt="Book 1">
-                <h3>The Great Gatsby</h3>
-                <p>by F. Scott Fitzgerald</p>
+    <main>
+        <h2>About Us</h2>
+        <p class="content">
+            At our online bookstore, we are dedicated to providing an enriching experience for students and book lovers alike. 
+            We strive to offer a wide variety of academic textbooks, literature, and resources to help you succeed in your studies and beyond. 
+            Our platform is user-friendly and accessible, making it easy to browse, select, and purchase the books you need.
+        </p>
+        <div class="highlight">
+            <h3>Discover Our Collection</h3>
+            <p>
+                From textbooks to bestsellers, our collection is curated to cater to all academic needs and personal interests. 
+                Explore different genres and find your next read right here!
+            </p>
+        </div>
+        
+        <div class="image-section">
+            <div class="image-box">
+                <img src="https://images.unsplash.com/photo-1544717305-6d5c4f5b9c0e" alt="Bookshelf" />
+                <div class="caption">Explore Our Diverse Collection</div>
             </div>
-            <div class="book-card">
-                <img src="https://images.unsplash.com/photo-1583706334780-2e63e05c4e4a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGJvb2slMjBjb252ZXIlMjBkYW5kYXMlMjByZWxhdGlvbnxlbnwwfHx8fDE2MDIxNzY0NTQ&ixlib=rb-1.2.1&q=80&w=400" alt="Book 2">
-                <h3>1984</h3>
-                <p>by George Orwell</p>
+            <div class="image-box">
+                <img src="https://images.unsplash.com/photo-1554221588-5563c91c0e93" alt="Reading" />
+                <div class="caption">Read, Learn, and Grow</div>
             </div>
-            <div class="book-card">
-                <img src="https://images.unsplash.com/photo-1583706435070-b450dcbcf0d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDExfHxiZWxsaWVmc3xlbnwwfHx8fDE2MDIxNzY0NTM&ixlib=rb-1.2.1&q=80&w=400" alt="Book 3">
-                <h3>Brave New World</h3>
-                <p>by Aldous Huxley</p>
-            </div>
-            <div class="book-card">
-                <img src="https://images.unsplash.com/photo-1504109782008-e3e021d1703b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDIxfHxiZWxsaWVmc3xlbnwwfHx8fDE2MDIxNzY0NDg&ixlib=rb-1.2.1&q=80&w=400" alt="Book 4">
-                <h3>Pride and Prejudice</h3>
-                <p>by Jane Austen</p>
-            </div>
-            <div class="book-card">
-                <img src="https://images.unsplash.com/photo-1515879218367-4f785233b67b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDI0fHxjb21pbmF0ZSUyMG1vcmUlMjBib29rfGVufDB8fHx8MTYwMjE3NjQ0Nw&ixlib=rb-1.2.1&q=80&w=400" alt="Book 5">
-                <h3>To Kill a Mockingbird</h3>
-                <p>by Harper Lee</p>
-            </div>
-            <div class="book-card">
-                <img src="https://images.unsplash.com/photo-1575888003181-cbe0967b4f04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDMyfHxiZWxsaWVmc3xlbnwwfHx8fDE2MDIxNzY0NTM&ixlib=rb-1.2.1&q=80&w=400" alt="Book 6">
-                <h3>The Catcher in the Rye</h3>
-                <p>by J.D. Salinger</p>
+            <div class="image-box">
+                <img src="https://images.unsplash.com/photo-1507537298832-9f9067c7a5c4" alt="Open Book" />
+                <div class="caption">Your Journey Begins with Us</div>
             </div>
         </div>
 
-        <p>Join our community of book lovers and stay updated with the latest releases and bestsellers! Follow us on social media:</p>
-        <nav class="socials">
-            <a href="#" class="fab fa-facebook-f"></a>
-            <a href="#" class="fab fa-twitter"></a>
-            <a href="#" class="fab fa-instagram"></a>
-        </nav>
-    </div>
-
+        <h3>Your Next Step:</h3>
+        <p>Click on "Select Faculty" to proceed with your course selection.</p>
+    </main>
     <footer>
-        <p>&copy; 2023 Online Bookstore. All rights reserved.</p>
+        <p>© 2025 Online Bookstore. All rights reserved.</p>
     </footer>
 </body>
 </html>

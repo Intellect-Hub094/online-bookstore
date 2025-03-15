@@ -3,111 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Bookstore</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Online Bookstore - Durban University of Technology</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMnHf5uWZp4Yp8NPn5ucP1wZwrKVpt7SQO4H8" crossorigin="anonymous">
+    
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Arial', sans-serif;
+            background-color: #e9ecef;
             margin: 0;
             padding: 0;
         }
+
         header {
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: white;
-            padding: 20px;
+            padding: 20px 0;
             text-align: center;
         }
-        nav a {
-            margin: 0 15px;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        .hero {
-            background-image: url('https://images.unsplash.com/photo-1576197147753-56a1be63b549');
-            background-size: cover;
-            background-position: center;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
-        }
-        .hero h1 {
-            font-size: 3em;
+
+        h1 {
             margin: 0;
         }
-        .container {
-            max-width: 900px;
-            margin: auto;
-            padding: 20px;
-            text-align: center;
+
+        nav {
+            margin: 15px 0;
         }
-        .buttons {
-            margin: 20px 0;
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
         }
-        .buttons a {
-            background-color: #4CAF50;
+
+        nav ul li {
+            margin: 0 15px; /* Space between buttons */
+        }
+
+        a.button {
+            padding: 10px 20px;
             color: white;
-            padding: 15px 25px;
             text-decoration: none;
+            background-color: #28a745; /* Green background */
             border-radius: 5px;
             transition: background-color 0.3s;
-            margin: 5px;
         }
-        .buttons a:hover {
-            background-color: #45a049;
+
+        a.button:hover {
+            background-color: #218838; /* Darker green on hover */
         }
-        footer {
-            text-align: center;
+
+        main {
+            max-width: 800px;
+            margin: 30px auto;
             padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #007bff; /* Blue heading */
+        }
+
+        p {
+            line-height: 1.6;
+            color: #333;
+        }
+
+        footer {
             background-color: #333;
             color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Online Bookstore</h1>
+        <h1>Durban University of Technology</h1>
+        <h2>Online Bookstore</h2>
         <nav>
-            <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('register') }}">Register</a>
-            <a href="{{ url_for('about') }}">About Us</a>
-            <a href="{{ url_for('categories') }}">View Categories</a>
+            <ul>
+                <li><a class="button" href="{{ url_for('login') }}">Login</a></li>
+                <li><a class="button" href="{{ url_for('register') }}">Register</a></li>
+                <li><a class="button" href="{{ url_for('about') }}">About Us</a></li>
+            </ul>
         </nav>
     </header>
-
-    <div class="hero">
-        <h1>Your Next Great Read Awaits!</h1>
-    </div>
-
-    <div class="container">
-        <h2>Welcome to Our Online Bookstore</h2>
-        <p>Discover a world of literature brought to life through stories, knowledge, and creative expression.</p>
-        <p>Explore various genres, including Fiction, Non-Fiction, Self-Help, Science, History, and many more.</p>
-        
-        <div class="buttons">
-            <a href="{{ url_for('categories') }}">Browse Categories</a>
-            <a href="{{ url_for('about') }}">Learn More About Us</a>
-            <a href="{{ url_for('login') }}">Login</a>
-        </div>
-
-        <h3>Stay Connected</h3>
-        <p>Follow us on our social media channels for the latest updates and promotions!</p>
-        <nav class="socials">
-            <a href="#" class="fab fa-facebook-f"></a>
-            <a href="#" class="fab fa-twitter"></a>
-            <a href="#" class="fab fa-instagram"></a>
-        </nav>
-    </div>
-
+    
+    <main>
+        <h2>Discover Amazing Books</h2>
+        <p>Explore our vast collection of books across various subjects tailored for the Durban University of Technology community.</p>
+        <p>Join us today and enhance your knowledge!</p>
+    </main>
+    
     <footer>
-        <p>&copy; 2023 Online Bookstore. All rights reserved.</p>
+        <p>&copy; 2023 Durban University of Technology - Online Bookstore. All rights reserved.</p>
     </footer>
 </body>
 </html>
