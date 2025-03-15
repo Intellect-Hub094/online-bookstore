@@ -113,7 +113,7 @@ def register():
         flash('Registration successful! You can now log in.', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
-
+# jjhjh
 
 @app.route('/logout')
 @login_required
