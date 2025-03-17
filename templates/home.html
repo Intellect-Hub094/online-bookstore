@@ -8,148 +8,192 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #eaeaea;
+            background-color: #f9f9f9;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
         header {
             background-color: #2c3e50;
             color: white;
             padding: 20px 0;
             text-align: center;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: bold;
         }
         .nav-buttons {
             margin: 15px 0;
         }
         .button {
-            padding: 10px 15px;
+            padding: 10px 20px;
             background-color: #2980b9;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             text-decoration: none;
             display: inline-block;
             margin: 5px 10px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 1em;
         }
         .button:hover {
             background-color: #1a598d;
+            transform: translateY(-3px);
         }
-        .social-icons {
-            margin: 10px 0;
-        }
-        .social-icons a {
+        .hero-section {
+            position: relative;
+            text-align: center;
             color: white;
-            margin: 0 10px;
-            font-size: 1.5em;
-            transition: color 0.3s;
+            margin-bottom: 40px;
+            overflow: hidden;
         }
-        .social-icons a:hover {
-            color: #3498db;
+        .hero-section img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            filter: brightness(0.7);
         }
-        main {
-            max-width: 800px;
-            margin: 40px auto;
+        .hero-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        .hero-text h2 {
+            font-size: 3em;
+            margin: 0;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        .hero-text p {
+            font-size: 1.2em;
+            margin: 10px 0 0;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        .features {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 40px 20px;
+            background-color: white;
+            margin: 20px auto;
+            max-width: 1200px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .feature-box {
+            flex: 1;
+            min-width: 250px;
+            margin: 10px;
+            text-align: center;
             padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        a {
+        .feature-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .feature-box i {
+            font-size: 2.5em;
             color: #2980b9;
-            text-decoration: none;
+            margin-bottom: 10px;
+        }
+        .feature-box h3 {
+            font-size: 1.5em;
+            margin: 10px 0;
+            color: #2c3e50;
+        }
+        .feature-box p {
+            font-size: 1em;
+            color: #555;
+        }
+        .second-hero-section {
+            background-color: #e67e22;
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+        }
+        .second-hero-section h2 {
+            font-size: 2.5em;
+            margin: 0;
             font-weight: bold;
         }
-        .content {
-            margin: 20px 0;
+        .second-hero-section p {
+            font-size: 1.2em;
+            margin: 10px 0 0;
         }
-        .highlight {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-left: 4px solid #2980b9;
-            margin: 15px 0;
+        .second-hero-section .button {
+            background-color: #2c3e50;
+            margin-top: 20px;
         }
-        .image-section {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        .image-box {
-            flex: 1;
-            min-width: 200px;
-            margin: 10px;
-            position: relative;
-        }
-        .image-box img {
-            width: 100%;
-            border-radius: 8px;
-        }
-        .image-box .caption {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 5px;
-            border-radius: 5px;
+        .second-hero-section .button:hover {
+            background-color: #1a598d;
         }
         footer {
             text-align: center;
-            margin-top: 20px;
-            padding: 10px 0;
+            padding: 20px 0;
             background-color: #2c3e50;
             color: white;
+            margin-top: 40px;
+        }
+        footer p {
+            margin: 0;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Welcome to Our Online Bookstore!</h1>
+        <h1>Welcome to Our Online Bookstore</h1>
         <div class="nav-buttons">
             <a class="button" href="{{ url_for('select_faculty') }}">Select Faculty</a>
             <a class="button" href="{{ url_for('logout') }}">Log Out</a>
         </div>
-        <div class="social-icons">
-            <a href="https://www.facebook.com" target="_blank" class="fab fa-facebook-square"></a>
-            <a href="https://www.twitter.com" target="_blank" class="fab fa-twitter-square"></a>
-            <a href="https://www.instagram.com/onlinebookstore195?utm_source=qr&igsh=ZzVvOWJzc2RnaHNu" target="_blank" class="fab fa-instagram-square"></a>
-            <a href="https://www.linkedin.com" target="_blank" class="fab fa-linkedin"></a>
-        </div>
     </header>
-    <main>
-        <h2>About Us</h2>
-        <p class="content">
-            At our online bookstore, we are dedicated to providing an enriching experience for students and book lovers alike. 
-            We strive to offer a wide variety of academic textbooks, literature, and resources to help you succeed in your studies and beyond. 
-            Our platform is user-friendly and accessible, making it easy to browse, select, and purchase the books you need.
-        </p>
-        <div class="highlight">
-            <h3>Discover Our Collection</h3>
-            <p>
-                From textbooks to bestsellers, our collection is curated to cater to all academic needs and personal interests. 
-                Explore different genres and find your next read right here!
-            </p>
-        </div>
-        
-        <div class="image-section">
-            <div class="image-box">
-                <img src="https://images.unsplash.com/photo-1544717305-6d5c4f5b9c0e" alt="Bookshelf" />
-                <div class="caption">Explore Our Diverse Collection</div>
-            </div>
-            <div class="image-box">
-                <img src="https://images.unsplash.com/photo-1554221588-5563c91c0e93" alt="Reading" />
-                <div class="caption">Read, Learn, and Grow</div>
-            </div>
-            <div class="image-box">
-                <img src="https://images.unsplash.com/photo-1507537298832-9f9067c7a5c4" alt="Open Book" />
-                <div class="caption">Your Journey Begins with Us</div>
-            </div>
-        </div>
 
-        <h3>Your Next Step:</h3>
-        <p>Click on "Select Faculty" to proceed with your course selection.</p>
-    </main>
+    <!-- First Hero Section -->
+    <div class="hero-section">
+        <img src="https://i.postimg.cc/RhKNqqjK/home-image.jpg" alt="Bookstore Image" />
+        <div class="hero-text">
+            <h2>Discover Your Next Adventure</h2>
+            <p>Explore our curated collection of books for every reader.</p>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features">
+        <div class="feature-box">
+            <i class="fas fa-book-open"></i>
+            <h3>Curated Collection</h3>
+            <p>Find the best books handpicked for you.</p>
+        </div>
+        <div class="feature-box">
+            <i class="fas fa-tags"></i>
+            <h3>Affordable Prices</h3>
+            <p>Get great deals on all your favorite books.</p>
+        </div>
+        <div class="feature-box">
+            <i class="fas fa-headset"></i>
+            <h3>Customer Support</h3>
+            <p>We're here to help you 24/7.</p>
+        </div>
+    </div>
+
+    <!-- Second Hero Section -->
+    <div class="second-hero-section">
+        <h2>Join Our Community</h2>
+        <p>Sign up today and get access to exclusive discounts and updates.</p>
+        <a class="button" href="#">Sign Up Now</a>
+    </div>
+
+    <!-- Footer -->
     <footer>
         <p>© 2025 Online Bookstore. All rights reserved.</p>
     </footer>
