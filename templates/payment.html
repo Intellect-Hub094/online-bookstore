@@ -1,0 +1,42 @@
+<!-- templates/payment.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Payment</h1>
+<form id="payment-form">
+    <div id="payment-element">
+        <!-- Stripe Payment Element will be inserted here -->
+    </div>
+    <button id="submit">Pay Now</button>
+</form>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe('{{ app.config["STRIPE_PUBLISHABLE_KEY"] }}');
+
+    const options = {
+        clientSecret: '{{ client_secret }}',
+        appearance: { theme: 'stripe' },
+    };
+
+    const elements = stripe.elements(options);
+    const paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-element');
+
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: '{{ url_for("payment_success", _external=True) }}',
+            },
+        });
+
+        if (error) {
+            alert(error.message);
+        }
+    });
+</script>
+{% endblock %}

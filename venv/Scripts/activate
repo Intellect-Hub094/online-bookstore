@@ -35,7 +35,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\27715\interllect Hub Application\online bookstore\venv"
+VIRTUAL_ENV="C:\Users\27715\Downloads\online bookstore\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

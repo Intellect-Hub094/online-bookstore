@@ -2,30 +2,58 @@ from flask import Flask, render_template, redirect, url_for, flash, request, ses
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField, EmailField, PasswordField, SubmitField, SelectField, FloatField, TextAreaField
+from wtforms import StringField, EmailField, PasswordField, SubmitField, SelectField, FloatField,BooleanField, IntegerField, TextAreaField, FileField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import random
 import smtplib
 import os
+import logging
+from wtforms import DateField
+from datetime import datetime
+from flask import jsonify
+#from dotenv import load_dotenv
+#load_dotenv()
+import stripe
+
 
 # Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your_secret_key')  # Ensure SECRET_KEY comes from environment
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:syabonga%40030715105507@localhost/online_bookstore_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = 'static/uploads'  # Folder to store uploaded images
+# Load Stripe keys from environment variables
+app.config['STRIPE_PUBLIC_KEY'] = 'pk_test_51R40Iu4ZxyYyj0NLBbeVrUgsFf9o4dbuQ9TYp72qZcHVfyjq4ahYYexOj8GsbxzQ0AWZ9vswMjXzQsVv7DjtLSg00NREbh3lZ'
+app.config['STRIPE_SECRET_KEY'] = 'sk_test_51R40Iu4ZxyYyj0NLFEeZLk1vIWVYgY9IjqzFLi2HallW4zoggXE70F6Ode93CNmXU2xKSmwpHwXTesJVGlHLhhXP00Xg5IiuLj'
+
+stripe.api_key = app.config['STRIPE_SECRET_KEY']
+stripe_publishable_key = 'pk_test_51R40Iu4ZxyYyj0NLSYS8HCFxvKrINdUpEluiVRKYEDRIK4qsyyWnu7aU1pblsM78CXr0TsEER2LrqwYy3ux3rplT00mng1htOL'  # Your publishable key
+
 
 # Initialize SQLAlchemy and Flask-Login
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
+# Ensure the upload folder exists
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+# User model
 # User model
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.String(50), unique=True, nullable=False)  # Unique profile ID
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
+    profile_picture = db.Column(db.String(250), nullable=True)
+    date_of_birth = db.Column(db.Date, nullable=True)  # Date of birth
+    marital_status = db.Column(db.String(50), nullable=True)  # Marital status
+    full_name = db.Column(db.String(150), nullable=True)  # Full name
+    phone_number = db.Column(db.String(20), nullable=True)  # Phone number
+    address = db.Column(db.String(250), nullable=True)  # Address
     feedbacks = db.relationship('Feedback', backref='user', lazy=True)
     orders = db.relationship('Order', backref='user', lazy=True)
 
@@ -77,15 +105,20 @@ class Book(db.Model):
     feedbacks = db.relationship('Feedback', backref='book', lazy=True)
 
 # Registration Form
+from wtforms import DateField
+
+# Registration Form
 class RegistrationForm(FlaskForm):
     email = EmailField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    profile_picture = FileField('Profile Picture')
+    date_of_birth = DateField('Date of Birth', format='%Y-%m-%d', validators=[DataRequired()])
+    marital_status = SelectField('Marital Status', choices=[('single', 'Single'), ('married', 'Married'), ('divorced', 'Divorced')], validators=[DataRequired()])
+    full_name = StringField('Full Name', validators=[DataRequired()])
+    phone_number = StringField('Phone Number', validators=[DataRequired()])
+    address = StringField('Address', validators=[DataRequired()])
     submit = SubmitField('Register')
-
-    def validate_email(self, email):
-        if not email.data.endswith('@dut4life.ac.za'):
-            raise ValidationError('Only DUT4Life emails are allowed.')
 
 # Login Form
 class LoginForm(FlaskForm):
@@ -93,14 +126,6 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
-# Payment Method Selection Form
-class PaymentMethodForm(FlaskForm):
-    payment_method = SelectField('Select Payment Method', 
-                                  choices=[('debit_card', 'Debit Card'), 
-                                           ('paypal', 'PayPal'), 
-                                           ('stripe', 'Stripe')], 
-                                  validators=[DataRequired()])
-    submit = SubmitField('Proceed')
 
 # Delivery Address Form
 class DeliveryAddressForm(FlaskForm):
@@ -111,11 +136,38 @@ class DeliveryAddressForm(FlaskForm):
 # Feedback Form
 class FeedbackForm(FlaskForm):
     book_id = SelectField('Select Book', coerce=int, validators=[DataRequired()])
-    received = SelectField('Did you receive the book?', 
-                           choices=[('yes', 'Yes'), ('no', 'No')], 
+    received = SelectField('Did you receive the book?',
+                           choices=[('yes', 'Yes'), ('no', 'No')],
                            validators=[DataRequired()])
     comments = StringField('Comments (if any)')
     submit = SubmitField('Submit Feedback')
+
+# Add Book Form
+class AddBookForm(FlaskForm):
+    faculty = SelectField('Faculty', coerce=int, validators=[DataRequired()])
+    department = SelectField('Department', coerce=int, validators=[DataRequired()])
+    course = SelectField('Course', coerce=int, validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired()])
+    author = StringField('Author', validators=[DataRequired()])
+    price = FloatField('Price', validators=[DataRequired()])
+    image = FileField('Book Image', validators=[DataRequired()])
+    submit = SubmitField('Add Book')
+
+    # Profile Form
+class ProfileForm(FlaskForm):
+    email = EmailField('Email', validators=[DataRequired(), Email()])
+    profile_picture = FileField('Update Profile Picture')
+    date_of_birth = DateField('Date of Birth', format='%Y-%m-%d', validators=[DataRequired()])
+    marital_status = SelectField('Marital Status', choices=[('single', 'Single'), ('married', 'Married'), ('divorced', 'Divorced')], validators=[DataRequired()])
+    full_name = StringField('Full Name', validators=[DataRequired()])
+    phone_number = StringField('Phone Number', validators=[DataRequired()])
+    address = StringField('Address', validators=[DataRequired()])
+    submit = SubmitField('Update Profile')
+
+class EditUserForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    is_admin = BooleanField('Is Admin')
+    submit = SubmitField('Update User')
 
 # Flask-Login user loader
 @login_manager.user_loader
@@ -144,8 +196,9 @@ def get_books_info(cart_items):
             }
     return books_info
 
-def process_payment(payment_method, bank_details):
-    return True  # Simulated payment processing logic, assume payment is successful
+#def process_payment(payment_method, payment_details):
+    # Simulated payment processing logic
+    return True  # Assume payment is successful
 
 def generate_order_code():
     return 'ORD-' + str(random.randint(1000, 9999))  # Generate a random Order Code
@@ -167,6 +220,7 @@ def send_confirmation_email(recipient_email, order_code):
     except Exception as e:
         print("Failed to send the email:", e)
 
+# Routes
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -178,7 +232,7 @@ def about():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    
+
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and check_password_hash(user.password, form.password.data):
@@ -190,21 +244,41 @@ def login():
 
     return render_template('login.html', form=form)
 
+from datetime import datetime
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        if User.query.filter_by(email=form.email.data).first():
-            flash('Email already registered. Please log in.', 'error')
-            return redirect(url_for('login'))
+        # Handle profile picture upload
+        profile_picture_url = None
+        if form.profile_picture.data:
+            profile_picture = form.profile_picture.data
+            filename = secure_filename(profile_picture.filename)
+            profile_picture_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            profile_picture.save(profile_picture_path)
+            profile_picture_url = f"uploads/{filename}"
+
+        # Create a new user
         hashed_password = generate_password_hash(form.password.data, method='pbkdf2:sha256')
-        new_user = User(email=form.email.data, password=hashed_password)
+        new_user = User(
+            profile_id=form.profile_id.data,  # If not auto-generated
+            email=form.email.data,
+            password=hashed_password,
+            profile_picture=profile_picture_url,
+            date_of_birth=form.date_of_birth.data,
+            marital_status=form.marital_status.data,
+            full_name=form.full_name.data,
+            phone_number=form.phone_number.data,
+            address=form.address.data
+        )
         db.session.add(new_user)
         db.session.commit()
         flash('Registration successful! You can now log in.', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
+        
 @app.route('/logout')
 @login_required
 def logout():
@@ -243,6 +317,40 @@ def my_feedback():
     feedbacks = Feedback.query.filter_by(user_id=current_user.id).all()
     return render_template('my_feedback.html', feedbacks=feedbacks)
 
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    form = ProfileForm()
+    if form.validate_on_submit():
+        # Handle profile picture upload
+        if form.profile_picture.data:
+            profile_picture = form.profile_picture.data
+            filename = secure_filename(profile_picture.filename)
+            profile_picture_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            profile_picture.save(profile_picture_path)
+            current_user.profile_picture = f"uploads/{filename}"
+
+        # Update profile fields
+        current_user.email = form.email.data
+        current_user.date_of_birth = form.date_of_birth.data
+        current_user.marital_status = form.marital_status.data
+        current_user.full_name = form.full_name.data
+        current_user.phone_number = form.phone_number.data
+        current_user.address = form.address.data
+
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('profile'))
+
+    # Pre-fill the form with current user data
+    form.email.data = current_user.email
+    form.date_of_birth.data = current_user.date_of_birth
+    form.marital_status.data = current_user.marital_status
+    form.full_name.data = current_user.full_name
+    form.phone_number.data = current_user.phone_number
+    form.address.data = current_user.address
+    return render_template('profile.html', form=form, user=current_user)
+
 @app.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
@@ -261,7 +369,7 @@ def admin_dashboard():
 def manage_users():
     if not current_user.is_admin:
         flash('You do not have permission to access this page.', 'error')
-        return redirect(url_for('home'))
+        return redirect(url_for('index'))
 
     users = User.query.all()
     return render_template('manage_users.html', users=users)
@@ -271,20 +379,21 @@ def manage_users():
 def edit_user(user_id):
     if not current_user.is_admin:
         flash('You do not have permission to access this page.', 'error')
-        return redirect(url_for('home'))
+        return redirect(url_for('index'))
 
     user = User.query.get_or_404(user_id)
-    form = RegistrationForm(obj=user)
+    form = EditUserForm(obj=user)  # Use the EditUserForm
 
     if form.validate_on_submit():
         user.email = form.email.data
-        if form.password.data:
-            user.password = generate_password_hash(form.password.data, method='pbkdf2:sha256')
+        user.is_admin = form.is_admin.data
         db.session.commit()
         flash('User updated successfully!', 'success')
         return redirect(url_for('manage_users'))
 
     return render_template('edit_user.html', form=form, user=user)
+
+    
 
 @app.route('/admin/delete_user/<int:user_id>', methods=['POST'])
 @login_required
@@ -299,13 +408,6 @@ def delete_user(user_id):
     flash('User deleted successfully!', 'success')
     return redirect(url_for('manage_users'))
 
-class AddBookForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    author = StringField('Author', validators=[DataRequired()])
-    price = FloatField('Price', validators=[DataRequired()])
-    course_id = SelectField('Course', coerce=int, validators=[DataRequired()])
-    submit = SubmitField('Add Book')
-
 @app.route('/admin/add_book', methods=['GET', 'POST'])
 @login_required
 def add_book():
@@ -314,43 +416,46 @@ def add_book():
         return redirect(url_for('index'))
 
     form = AddBookForm()
-    form.course_id.choices = [(course.id, course.name) for course in Course.query.all()]
+
+    # Populate faculty dropdown
+    form.faculty.choices = [(f.id, f.name) for f in Faculty.query.all()]
 
     if form.validate_on_submit():
+        # Handle file upload
+        image = form.image.data
+        filename = secure_filename(image.filename)
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        image.save(image_path)
+        image_url = f"uploads/{filename}"
+
+        # Create a new book
         new_book = Book(
             title=form.title.data,
             author=form.author.data,
+            course_id=form.course.data,
             price=form.price.data,
-            course_id=form.course_id.data
+            image_url=image_url
         )
         db.session.add(new_book)
         db.session.commit()
         flash('Book added successfully!', 'success')
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('books'))
 
     return render_template('add_book.html', form=form)
 
-@app.route('/admin/edit_book/<int:book_id>', methods=['GET', 'POST'])
-@login_required
-def edit_book(book_id):
-    if not current_user.is_admin:
-        flash('You do not have permission to access this page.', 'error')
-        return redirect(url_for('home'))
 
-    book = Book.query.get_or_404(book_id)
-    form = AddBookForm(obj=book)
-    form.course_id.choices = [(course.id, course.name) for course in Course.query.all()]
+@app.route('/get_departments/<int:faculty_id>')
+def get_departments(faculty_id):
+    departments = Department.query.filter_by(faculty_id=faculty_id).all()
+    departments_list = [{'id': d.id, 'name': d.name} for d in departments]
+    return jsonify(departments_list)
 
-    if form.validate_on_submit():
-        book.title = form.title.data
-        book.author = form.author.data
-        book.price = form.price.data
-        book.course_id = form.course_id.data
-        db.session.commit()
-        flash('Book updated successfully!', 'success')
-        return redirect(url_for('admin_dashboard'))
+@app.route('/get_courses/<int:department_id>')
+def get_courses(department_id):
+    courses = Course.query.filter_by(department_id=department_id).all()
+    courses_list = [{'id': c.id, 'name': c.name} for c in courses]
+    return jsonify(courses_list)
 
-    return render_template('edit_book.html', form=form, book=book)
 
 @app.route('/admin/delete_book/<int:book_id>', methods=['POST'])
 @login_required
@@ -364,6 +469,43 @@ def delete_book(book_id):
     db.session.commit()
     flash('Book deleted successfully!', 'success')
     return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/edit_book/<int:book_id>', methods=['GET', 'POST'])
+@login_required
+def edit_book(book_id):
+    if not current_user.is_admin:
+        flash('You do not have permission to access this page.', 'error')
+        return redirect(url_for('index'))
+
+    book = Book.query.get_or_404(book_id)
+    form = AddBookForm(obj=book)  # Reuse the AddBookForm for editing
+
+    # Populate the course dropdown
+    form.course_id.choices = [(course.id, course.name) for course in Course.query.all()]
+
+    if form.validate_on_submit():
+        try:
+            # Handle file upload
+            if form.image.data:
+                image = form.image.data
+                filename = secure_filename(image.filename)
+                image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                image.save(image_path)
+                book.image_url = f"uploads/{filename}"  # Update image URL
+
+            # Update book details
+            book.title = form.title.data
+            book.author = form.author.data
+            book.price = form.price.data
+            book.course_id = form.course_id.data
+            db.session.commit()
+            flash('Book updated successfully!', 'success')
+            return redirect(url_for('books'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Failed to update book. Error: {str(e)}', 'error')
+
+    return render_template('edit_book.html', form=form, book=book)
 
 @app.route('/select_faculty', methods=['GET'])
 @login_required
@@ -390,21 +532,102 @@ def course_books(course_id):
     books = Book.query.filter_by(course_id=course_id).all()
     return render_template('course_books.html', books=books, course=course)
 
+def calculate_total_price(cart_items):
+    total = 0.0
+    for book_id, item in cart_items.items():
+        # Ensure item is a dictionary and has 'price' and 'quantity' keys
+        if isinstance(item, dict) and 'price' in item and 'quantity' in item:
+            total += item['price'] * item['quantity']
+        else:
+            # Log an error or handle invalid items
+            print(f"Invalid item in cart: {item}")
+    return total
+
 @app.route('/cart', methods=['GET'])
 @login_required
 def cart():
+    # Retrieve the cart from the session or initialize it as an empty dictionary
     cart_items = session.get('cart', {})
-    total_price = calculate_total_price(cart_items)
-    return render_template('cart.html', cart_items=cart_items, total_price=total_price)
+
+    # Ensure the cart is a dictionary (in case it was corrupted or improperly set)
+    if not isinstance(cart_items, dict):
+        cart_items = {}
+
+    # Validate and clean up cart_items to ensure proper structure
+    cleaned_cart_items = {}
+    for book_id, item in cart_items.items():
+        if isinstance(item, dict) and 'price' in item and 'quantity' in item:
+            # Ensure price is a float and quantity is an integer
+            cleaned_cart_items[book_id] = {
+                'title': item.get('title', 'Unknown Title'),
+                'author': item.get('author', 'Unknown Author'),
+                'price': float(item['price']),
+                'quantity': int(item['quantity']),
+                'image_url': item.get('image_url', 'uploads/default_book.jpg')
+            }
+        else:
+            # Log invalid items and skip them
+            print(f"Invalid item in cart (skipping): {item}")
+
+    # Calculate the total price of the cart
+    total_price = calculate_total_price(cleaned_cart_items)
+
+    # Save the cleaned cart back to the session (optional)
+    session['cart'] = cleaned_cart_items
+
+    # Render the cart page with the cart items and total price
+    return render_template('cart.html', cart_items=cleaned_cart_items, total_price=total_price)
 
 @app.route('/add_to_cart/<int:book_id>', methods=['POST'])
 @login_required
 def add_to_cart(book_id):
-    book = Book.query.get_or_404(book_id)
-    cart = session.get('cart', {})
-    cart[str(book_id)] = cart.get(str(book_id), 0) + 1
-    session['cart'] = cart
-    flash(f'{book.title} has been added to your cart!', 'success')
+    try:
+        # Fetch the book from the database or return a 404 error if not found
+        book = Book.query.get_or_404(book_id)
+
+        # Retrieve the cart from the session or initialize it as an empty dictionary
+        cart = session.get('cart', {})
+
+        # Ensure the cart is a dictionary (in case it was corrupted or improperly set)
+        if not isinstance(cart, dict):
+            cart = {}
+
+        # If the book is already in the cart, increment the quantity
+        if str(book_id) in cart:
+            # Ensure the cart entry for this book is a dictionary
+            if isinstance(cart[str(book_id)], dict):
+                cart[str(book_id)]['quantity'] += 1
+            else:
+                # If it's not a dictionary, reset it to a proper structure
+                cart[str(book_id)] = {
+                    'title': book.title,
+                    'author': book.author,
+                    'price': float(book.price),  # Ensure price is a float
+                    'quantity': 1,
+                    'image_url': book.image_url  # Include image URL
+                }
+        else:
+            # If the book is not in the cart, add it with a quantity of 1 and its details
+            cart[str(book_id)] = {
+                'title': book.title,
+                'author': book.author,
+                'price': float(book.price),  # Ensure price is a float
+                'quantity': 1,
+                'image_url': book.image_url  # Include image URL
+            }
+
+        # Save the updated cart back to the session
+        session['cart'] = cart
+
+        # Flash a success message to the user
+        flash(f'{book.title} has been added to your cart!', 'success')
+
+    except Exception as e:
+        # Log the error and flash a user-friendly message
+        print(f"Error adding to cart: {e}")
+        flash('An error occurred while adding the book to your cart. Please try again.', 'error')
+
+    # Redirect the user to the course books page
     return redirect(url_for('course_books', course_id=book.course_id))
 
 @app.route('/remove_from_cart/<int:book_id>', methods=['POST'])
@@ -423,60 +646,151 @@ def remove_from_cart(book_id):
 @login_required
 def checkout():
     cart_items = session.get('cart', {})
-    
+
     if not cart_items:
         flash('Your cart is empty!', 'error')
-        return redirect(url_for('cart'))
+        return redirect(url_for('course_books'))
 
-    total_price = calculate_total_price(cart_items)
-    books_info = get_books_info(cart_items)
+    total_price = sum(item['price'] * item['quantity'] for item in cart_items.values())
 
-    return render_template('checkout.html', cart_items=cart_items, total_price=total_price, books_info=books_info)
+    try:
+        # Create a PaymentIntent for Stripe
+        intent = stripe.PaymentIntent.create(
+            amount=int(total_price * 100),  # Convert amount to cents
+            currency='usd',
+            automatic_payment_methods={'enabled': True},
+        )
+        client_secret = intent.client_secret
+    except stripe.error.StripeError as e:
+        flash('Failed to create payment intent. Please try again.', 'error')
+        return redirect(url_for('course_books'))
 
-@app.route('/payment_method', methods=['GET', 'POST'])
+    return render_template(
+        'checkout.html',
+        cart_items=cart_items,
+        total_price=total_price,
+        client_secret=client_secret,
+        stripe_publishable_key=stripe_publishable_key  # Make sure you pass your Stripe publishable key
+    )
+
+    
+@app.route('/payment_intent_confirm', methods=['POST'])
 @login_required
-def payment_method():
-    form = PaymentMethodForm()
-    if form.validate_on_submit():
-        session['payment_method'] = form.payment_method.data
-        return redirect(url_for('delivery_address'))
-    return render_template('payment_method.html', form=form)
+def payment_intent_confirm():
+    try:
+        # Get payment intent ID and payment method ID from the form
+        payment_intent_id = request.form['payment_intent_id']
+        payment_method_id = request.form['payment_method_id']
+        
+        # Confirm the PaymentIntent with Stripe
+        intent = stripe.PaymentIntent.confirm(
+            payment_intent_id,
+            payment_method=payment_method_id
+        )
+
+        # Check if the payment succeeded
+        if intent.status == 'succeeded':
+            flash('Payment Successful! Thank you for your purchase.', 'success')
+            session.pop('cart', None)  # Clear the cart after payment success
+            return redirect(url_for('order_success'))  # Redirect to order success page
+        else:
+            flash('Payment failed. Please try again.', 'error')
+            return redirect(url_for('checkout'))
+
+    except Exception as e:
+        flash(f'Error: {str(e)}', 'error')
+        return redirect(url_for('checkout'))
+
+@app.route('/payment-success')
+def payment_success():
+    payment_intent_id = request.args.get('payment_intent')
+
+    if payment_intent_id:
+        try:
+            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+            amount = payment_intent.amount_received / 100  # convert cents to dollars
+
+            # Clear the cart after successful payment
+            session.pop('cart', None)
+
+            return render_template('success.html', payment_intent=payment_intent, amount=amount)
+        except stripe.error.StripeError as e:
+            return render_template('success.html', error=str(e))
+    else:
+        return render_template('success.html', error="Payment details not found.")
 
 @app.route('/delivery_address', methods=['GET', 'POST'])
 @login_required
 def delivery_address():
+    # Retrieve the selected payment method from the session
+    payment_method = session.get('payment_method')
+    print("Selected Payment Method (Delivery Address):", payment_method)  # Debug
+
+    if not payment_method:
+        flash('Please select a payment method first.', 'error')
+        return redirect(url_for('payment_method'))
+
     form = DeliveryAddressForm()
+
     if form.validate_on_submit():
         address = form.address.data
         email = form.email.data
         order_code = generate_order_code()  # Generate unique order code
-        payment_method = session.get('payment_method')
 
         # Save the order to the database
-        new_order = Order(user_id=current_user.id, address=address, email=email, order_code=order_code, payment_method=payment_method)
+        new_order = Order(
+            user_id=current_user.id,
+            address=address,
+            email=email,
+            order_code=order_code,
+            payment_method=payment_method
+        )
         db.session.add(new_order)
         db.session.commit()
 
-        # Process the payment (simulation)
-        payment_success = process_payment(payment_method, form.data)
-        if payment_success:
-            send_confirmation_email(email, order_code)  # Send email notification
-            flash('Payment successful! Your order has been confirmed.', 'success')
-            return redirect(url_for('success_page'))
-        else:
-            flash('Payment failed. Please try again.', 'error')
+        # Clear the cart
+        session.pop('cart', None)
+
+        # Send confirmation email
+        send_confirmation_email(email, order_code)
+
+        flash('Order confirmed! A confirmation email has been sent.', 'success')
+        return redirect(url_for('success_page'))
 
     return render_template('delivery_address.html', form=form)
 
-@app.route('/success')
-@login_required
-def success_page():
-    return render_template('success.html', message='Your order has been successfully placed!')
+
+@app.route('/payment')
+def payment():
+    return render_template('payment.html')
+
+@app.route('/create-payment-intent', methods=['POST'])
+def create_payment_intent():
+    try:
+        # Get the total price from the cart (you can calculate it dynamically)
+        cart_items = session.get('cart', {})
+        total_price = calculate_total_price(cart_items)  # Assuming this function returns the total price in dollars
+
+        # Create a PaymentIntent
+        intent = stripe.PaymentIntent.create(
+            amount=int(total_price * 100),  # Convert total price to cents
+            currency='usd',
+            automatic_payment_methods={'enabled': True},
+        )
+
+        # Return the client secret to the frontend
+        return {'client_secret': intent.client_secret}
+    except Exception as e:
+        return str(e), 400
+
+#@app.route('/payment-success')
+#def payment_success():
+   # return render_template('payment_success.html')
 
 @app.route('/contact', methods=['GET', 'POST'])
 @login_required
 def contact():
-    return render_template('contact.html')  # Update if you implement the contact form
+    return render_template('contact.html')
 
 # Create tables if they don't exist (initial setup)
 if __name__ == '__main__':

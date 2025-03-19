@@ -107,7 +107,11 @@
         <div class="book-grid">
             {% for book in books %}
                 <div class="book-card">
-                    <img src="{{ book.image_url }}" alt="{{ book.title }}">
+                    {% if book.image_url %}
+                        <img src="{{ url_for('static', filename=book.image_url) }}" alt="{{ book.title }}">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='uploads/default_book.jpg') }}" alt="Default Book Image">
+                    {% endif %}
                     <div class="book-title">{{ book.title }}</div>
                     <div class="book-author">by {{ book.author }}</div>
                     <div class="book-price">R{{ book.price }}</div>

@@ -1,0 +1,55 @@
+<form id="payment-form" method="POST" action="{{ url_for('payment_intent_confirm') }}">
+    <div id="payment-element">
+        <!-- Stripe Payment Element will be inserted here -->
+    </div>
+    <button id="submit">Pay Now</button>
+    <input type="hidden" name="payment_intent_id" id="payment_intent_id">
+    <input type="hidden" name="payment_method_id" id="payment_method_id">
+</form>
+
+<script>
+    const stripe = Stripe('{{ stripe_publishable_key }}');  // Ensure you use the correct publishable key
+
+    const options = {
+        clientSecret: '{{ client_secret }}',
+        appearance: {
+            theme: 'stripe',
+        },
+    };
+
+    const elements = stripe.elements(options);
+    const paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-element');
+
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        // Create PaymentMethod
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: paymentElement,
+        });
+
+        if (error) {
+            alert(error.message);  // Display error to the user
+        } else {
+            // Confirm the payment on Stripe's side
+            const { paymentIntent, error: confirmError } = await stripe.confirmPayment({
+                elements,
+                confirmParams: {
+                    return_url: '{{ url_for("payment_success", _external=True) }}',  // Success URL
+                },
+            });
+
+            if (confirmError) {
+                alert(confirmError.message);  // Display error to the user
+            } else {
+                // Store the payment intent and payment method IDs
+                document.getElementById('payment_intent_id').value = paymentIntent.id;
+                document.getElementById('payment_method_id').value = paymentMethod.id;
+                form.submit();  // Submit the form to the backend
+            }
+        }
+    });
+</script>

@@ -1,24 +1,48 @@
-@app.route('/admin/add_book', methods=['POST'])
-@login_required
-def add_book():
-    if not current_user.is_admin:
-        flash('You do not have permission to access this page.', 'error')
-        return redirect(url_for('index'))
+{% extends "base.html" %}
 
-    form = AddBookForm()
-    form.category_id.choices = [(category.id, category.name) for category in Category.query.all()]
+{% block title %}Add Book - Online Bookstore{% endblock %}
 
-    if form.validate_on_submit():
-        new_book = Book(
-            title=form.title.data,
-            author=form.author.data,
-            price=form.price.data,
-            category_id=form.category_id.data
-        )
-        db.session.add(new_book)
-        db.session.commit()
-        flash('Book added successfully!', 'success')
-    else:
-        flash('Failed to add book. Please check your inputs.', 'error')
-
-    return redirect(url_for('admin_dashboard'))
+{% block content %}
+    <h2>Add Book</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.title.label }}<br>
+            {{ form.title(size=32) }}<br>
+            {% for error in form.title.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.author.label }}<br>
+            {{ form.author(size=32) }}<br>
+            {% for error in form.author.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.price.label }}<br>
+            {{ form.price() }}<br>
+            {% for error in form.price.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.course_id.label }}<br>
+            {{ form.course_id() }}<br>
+            {% for error in form.course_id.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.image.label }}<br>
+            {{ form.image() }}<br>
+            {% for error in form.image.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+{% endblock %}

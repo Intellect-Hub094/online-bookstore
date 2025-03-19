@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Books</title>
-</head>
-<body>
-    <h1>All Books</h1>
-    <ul>
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Books</h2>
+    <div>
         {% for book in books %}
-        <li>{{ book.title }} by {{ book.author }}</li>
+            <div>
+                <h3>{{ book.title }}</h3>
+                <p>Author: {{ book.author }}</p>
+                <p>Price: ${{ book.price }}</p>
+                <img src="{{ url_for('static', filename=book.image_url) }}" alt="{{ book.title }}" width="150">
+            </div>
         {% endfor %}
-    </ul>
-    <a href="{{ url_for('home') }}">Back to Home</a>
-</body>
-</html>
+    </div>
+{% endblock %}

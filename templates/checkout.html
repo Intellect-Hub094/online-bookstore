@@ -1,128 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 20px;
+<form id="payment-form">
+    <div id="payment-element"></div>
+    <button id="submit">Pay Now</button>
+</form>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe('{{ stripe_publishable_key }}'); // Make sure this is passed to your template
+
+    const options = {
+        clientSecret: '{{ client_secret }}',
+        appearance: {
+            theme: 'stripe',
+        },
+    };
+
+    const elements = stripe.elements(options);
+    const paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-element');
+
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: '{{ url_for("payment_success", _external=True) }}', // This is important!
+            },
+        });
+
+        if (error) {
+            alert(error.message);
         }
-
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            background-color: #f2f2f2;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        strong {
-            color: #333;
-        }
-
-        h2 {
-            color: #2c3e50;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        form {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        select {
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 100%;
-            max-width: 300px;
-            margin: 0 auto;
-        }
-
-        button {
-            background-color: #2980b9;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #1a598d;
-        }
-
-        .return-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #2980b9;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Checkout</h1>
-        
-        <ul>
-        {% for book_id, quantity in cart_items.items() %}
-            {% if book_id in books_info %}
-                <li>
-                    <strong>Title:</strong> {{ books_info[book_id].title }}<br>
-                    <strong>Quantity:</strong> {{ quantity }}<br>
-                    <strong>Price:</strong> R{{ books_info[book_id].price * quantity }}<br>
-                </li>
-            {% else %}
-                <li>Book information not available for ID: {{ book_id }}</li>
-            {% endif %}
-        {% endfor %}
-        </ul>
-
-        <h2>Total Price: R{{ total_price }}</h2>
-
-        <form action="{{ url_for('checkout') }}" method="post">
-            <label for="payment_method">Choose a payment method:</label>
-            <select id="payment_method" name="payment_method" required>
-                <option value="credit_card">Credit Card</option>
-                <option value="paypal">PayPal</option>
-                <!-- Add other payment methods as needed -->
-            </select>
-
-            <button type="submit">Proceed to Payment</button>
-        </form>
-
-        <a href="{{ url_for('cart') }}" class="return-link">Return to Cart</a>
-    </div>
-</body>
-</html>
+    });
+</script>
