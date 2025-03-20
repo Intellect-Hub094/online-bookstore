@@ -103,6 +103,7 @@ class Book(db.Model):
     price = db.Column(db.Float, nullable=False)
     image_url = db.Column(db.String(250), nullable=True)
     feedbacks = db.relationship('Feedback', backref='book', lazy=True)
+    
 
 # Registration Form
 from wtforms import DateField
