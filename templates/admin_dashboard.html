@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Manage Transactions</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
@@ -16,11 +16,11 @@
         .sidebar {
             background-color: #333;
             width: 200px;
-            height: 100vh; /* Full height */
+            height: 100vh;
             padding: 20px;
             box-sizing: border-box;
-            position: fixed; /* Fixed position */
-            overflow-y: auto; /* Allow scrolling if links overflow */
+            position: fixed;
+            overflow-y: auto;
         }
         .sidebar ul {
             list-style: none;
@@ -46,7 +46,7 @@
             background-color: white;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-left: 220px; /* Adjust for sidebar width */
+            margin-left: 220px;
             margin-top: 20px;
             margin-bottom: 20px;
         }
@@ -54,46 +54,11 @@
             text-align: center;
             color: #333;
         }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            border-color: #007BFF;
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
-        }
-        .form-group button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-        .form-group button:hover {
-            background-color: #0056b3;
-        }
-        .book-list {
+        .transaction-list {
             margin-top: 20px;
             max-width: 100%;
         }
-        .book-item {
+        .transaction-item {
             border: 1px solid #ccc;
             padding: 10px;
             margin-bottom: 10px;
@@ -102,10 +67,8 @@
             justify-content: space-between;
             align-items: center;
         }
-        .book-item img {
-            max-width: 100px;
-            height: auto;
-            border-radius: 4px;
+        .transaction-item p {
+            margin: 0;
         }
         .delete-button {
             background: #FF6347;
@@ -118,21 +81,6 @@
         .delete-button:hover {
             background: #FF4500;
         }
-        footer {
-            background: #007BFF;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
     </style>
 </head>
 <body>
@@ -143,6 +91,7 @@
             <li><a href="#" onclick="showTab('add-book')">Add Book</a></li>
             <li><a href="#" onclick="showTab('manage-books')">Manage Books</a></li>
             <li><a href="{{ url_for('manage_users') }}">Manage Users</a></li>
+            <li><a href="{{ url_for('manage_transactions') }}">Manage Transactions</a></li> <!-- New Link -->
             <li><a href="{{ url_for('my_feedback') }}">View Feedback</a></li>
             <li><a href="{{ url_for('logout') }}">Logout</a></li>
         </ul>
@@ -150,81 +99,24 @@
 
     <!-- Main Content -->
     <div class="container">
-        <!-- Add Book Tab -->
-        <div id="add-book" class="tab-content active">
-            <h2>Add New Book</h2>
-            <form method="POST" action="{{ url_for('add_book') }}" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="title">Book Title</label>
-                    <input type="text" name="title" id="title" required>
+        <h1>Manage Transactions</h1>
+        <div class="transaction-list">
+            {% for transaction in transactions %}
+            <div class="transaction-item">
+                <div>
+                    <p><strong>Transaction ID:</strong> {{ transaction.transaction_id }}</p>
+                    <p><strong>User ID:</strong> {{ transaction.user_id }}</p>
+                    <p><strong>Order ID:</strong> {{ transaction.order_id }}</p>
+                    <p><strong>Amount:</strong> ${{ transaction.amount }}</p>
+                    <p><strong>Payment Method:</strong> {{ transaction.payment_method }}</p>
+                    <p><strong>Status:</strong> {{ transaction.payment_status }}</p>
                 </div>
-                <div class="form-group">
-                    <label for="author">Author</label>
-                    <input type="text" name="author" id="author" required>
-                </div>
-                <div class="form-group">
-                    <label for="price">Price</label>
-                    <input type="number" step="0.01" name="price" id="price" required>
-                </div>
-                <div class="form-group">
-                    <label for="course_id">Course</label>
-                    <select name="course_id" id="course_id" required>
-                        {% for course in courses %}
-                        <option value="{{ course.id }}">{{ course.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="image">Book Image</label>
-                    <input type="file" name="image" id="image" required>
-                </div>
-                <div class="form-group">
-                    <button type="submit">Add Book</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Manage Books Tab -->
-        <div id="manage-books" class="tab-content">
-            <h2>Existing Books</h2>
-            <div class="book-list">
-                {% for book in books %}
-                <div class="book-item">
-                    <div>
-                        <strong>{{ book.title }}</strong><br>
-                        Author: {{ book.author }}<br>
-                        Price: ${{ book.price }}<br>
-                        {% if book.image_url %}
-                        <img src="{{ url_for('static', filename=book.image_url) }}" alt="{{ book.title }}">
-                        {% endif %}
-                    </div>
-                    <form method="POST" action="{{ url_for('delete_book', book_id=book.id) }}">
-                        <button type="submit" class="delete-button">Delete</button>
-                    </form>
-                </div>
-                {% endfor %}
+                <form method="POST" action="{{ url_for('delete_transaction', transaction_id=transaction.transaction_id) }}">
+                    <button type="submit" class="delete-button">Delete</button>
+                </form>
             </div>
+            {% endfor %}
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Online Bookstore - Admin Area</p>
-    </footer>
-
-    <script>
-        function showTab(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-
-            // Show the selected tab content
-            document.getElementById(tabId).classList.add('active');
-        }
-
-        // Set the default tab to "Add Book"
-        showTab('add-book');
-    </script>
 </body>
 </html>

@@ -1,0 +1,50 @@
+<!-- templates/admin/manage_transactions.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Transactions</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Add your custom styles here */
+        body { font-family: Arial, sans-serif; }
+        .transaction-list { margin-top: 20px; }
+        .transaction-item { padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .transaction-item ul { margin: 10px 0; }
+        .delete-button { background: #FF6347; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .delete-button:hover { background: #FF4500; }
+    </style>
+</head>
+<body>
+    <h1>Manage Transactions</h1>
+    <div class="transaction-list">
+        {% for transaction in transactions %}
+        <div class="transaction-item">
+            <strong>Transaction ID: {{ transaction.id }}</strong><br>
+            User ID: {{ transaction.user_id }}<br>
+            Total Amount: ${{ transaction.total_amount }}<br>
+            Status: {{ transaction.payment_status }}<br>
+            Date: {{ transaction.transaction_date }}<br>
+            <strong>Books Purchased:</strong>
+            <ul>
+                {% for book in transaction.books %}
+                <li>{{ book.title }} - ${{ book.price }}</li>
+                {% endfor %}
+            </ul>
+            
+            <!-- Update Payment Status -->
+            <form method="POST" action="{{ url_for('update_transaction_status', transaction_id=transaction.id) }}">
+                <label for="payment_status">Update Status</label>
+                <select name="payment_status" id="payment_status">
+                    <option value="Pending" {% if transaction.payment_status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="Paid" {% if transaction.payment_status == 'Paid' %}selected{% endif %}>Paid</option>
+                    <option value="Failed" {% if transaction.payment_status == 'Failed' %}selected{% endif %}>Failed</option>
+                </select>
+                <button type="submit">Update Status</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+    "python.analysis.extraPaths": ["C:/Users/27715/Downloads/online bookstore/venv/Lib/site-packages"],
+    "python.analysis.autoSearchPaths": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.analysis.autoImportCompletions": false,
+    "python.languageServer": "Default"
+}
