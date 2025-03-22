@@ -32,11 +32,12 @@ from wtforms import DateField
 from datetime import datetime
 from flask import jsonify
 
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
+
 import stripe
 
-# from flask_mail import Message, Email
+from flask_mail import Message, Email
 
 # Initialize Flask app
 app = Flask(__name__)
