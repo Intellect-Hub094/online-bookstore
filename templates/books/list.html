@@ -1,103 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Books - University Library Bookstore</title>
-    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
-    <link href="/style.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container my-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Books</h1>
-            <!-- Only show for admin -->
-            <div class="admin-controls" style="display: none;">
-                <a href="/books/a/create/new" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Add New Book
-                </a>
-            </div>
-        </div>
-
-        <!-- Search and Filter -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <form class="row g-3">
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" placeholder="Search books...">
-                    </div>
-                    <div class="col-md-3">
-                        <select class="form-select">
-                            <option selected>Category</option>
-                            <option>Textbooks</option>
-                            <option>Research Papers</option>
-                            <option>Journals</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <select class="form-select">
-                            <option selected>Sort by</option>
-                            <option>Price: Low to High</option>
-                            <option>Price: High to Low</option>
-                            <option>Newest First</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary w-100">Search</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Books Grid -->
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            <!-- Book Card Template -->
-            <div class="col">
-                <div class="card h-100">
-                    <img src="https://via.placeholder.com/200x300" class="card-img-top" alt="Book Cover">
-                    <div class="card-body">
-                        <h5 class="card-title">Introduction to Computer Science</h5>
-                        <p class="card-text">John Smith</p>
-                        <p class="card-text"><small class="text-muted">$49.99</small></p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <a href="/books/c/view/1" class="btn btn-primary">View Details</a>
-                            <button class="btn btn-outline-secondary wishlist-toggle">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <!-- Admin Controls -->
-                        <div class="admin-controls mt-2" style="display: none;">
-                            <div class="btn-group w-100">
-                                <a href="/books/a/edit/1" class="btn btn-warning">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="/books/a/delete/1" class="btn btn-danger">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Repeat for more books -->
-        </div>
-
-        <!-- Pagination -->
-        <nav class="mt-4">
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
+{% extends "components/layout.html" %} {% block content %}
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Books</h1>
+    <!-- Only show for admin -->
+    <div class="admin-controls" style="display: none">
+      <a href="/books/a/create/new" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add New Book
+      </a>
     </div>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+  </div>
+
+  <!-- Search and Filter -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form class="row g-3">
+        <div class="col-md-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search books..."
+          />
+        </div>
+        <div class="col-md-3">
+          <select class="form-select">
+            <option selected>Category</option>
+            <option>Textbooks</option>
+            <option>Research Papers</option>
+            <option>Journals</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select">
+            <option selected>Sort by</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Newest First</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Books Grid -->
+  <div class="row row-cols-1 row-cols-md-4 g-4">
+    <!-- Book Card Template -->
+    <div class="col">
+      <div class="card h-100">
+        <img
+          src="https://via.placeholder.com/200x300"
+          class="card-img-top"
+          alt="Book Cover"
+        />
+        <div class="card-body">
+          <h5 class="card-title">Introduction to Computer Science</h5>
+          <p class="card-text">John Smith</p>
+          <p class="card-text"><small class="text-muted">$49.99</small></p>
+          <div class="d-flex justify-content-between align-items-center">
+            <a href="/books/c/view/1" class="btn btn-primary">View Details</a>
+            <button class="btn btn-outline-secondary wishlist-toggle">
+              <i class="far fa-heart"></i>
+            </button>
+          </div>
+          <!-- Admin Controls -->
+          <div class="admin-controls mt-2" style="display: none">
+            <div class="btn-group w-100">
+              <a href="/books/a/edit/1" class="btn btn-warning">
+                <i class="fas fa-edit"></i>
+              </a>
+              <a href="/books/a/delete/1" class="btn btn-danger">
+                <i class="fas fa-trash"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Repeat for more books -->
+  </div>
+
+  <!-- Pagination -->
+  <nav class="mt-4">
+    <ul class="pagination justify-content-center">
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1">Previous</a>
+      </li>
+      <li class="page-item active"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+{% endblock %}

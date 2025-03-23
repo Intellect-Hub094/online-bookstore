@@ -1,118 +1,169 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Order - University Library Bookstore</title>
-    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
-    <link href="/style.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card shadow">
-                    <div class="card-body p-5">
-                        <h2 class="text-center mb-4">Create New Order</h2>
-                        <form action="/orders/c/create/1" method="POST">
-                            <!-- Customer Information -->
-                            <div class="mb-4">
-                                <h4>Customer Information</h4>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="firstName" class="form-label">First Name</label>
-                                        <input type="text" class="form-control" id="firstName" name="firstName" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="lastName" class="form-label">Last Name</label>
-                                        <input type="text" class="form-control" id="lastName" name="lastName" required>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="phone" class="form-label">Phone</label>
-                                    <input type="tel" class="form-control" id="phone" name="phone" required>
-                                </div>
-                            </div>
-
-                            <!-- Shipping Information -->
-                            <div class="mb-4">
-                                <h4>Shipping Information</h4>
-                                <div class="mb-3">
-                                    <label for="address" class="form-label">Address</label>
-                                    <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="city" class="form-label">City</label>
-                                        <input type="text" class="form-control" id="city" name="city" required>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label for="state" class="form-label">State</label>
-                                        <input type="text" class="form-control" id="state" name="state" required>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label for="zipCode" class="form-label">ZIP Code</label>
-                                        <input type="text" class="form-control" id="zipCode" name="zipCode" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Order Items -->
-                            <div class="mb-4">
-                                <h4>Order Items</h4>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Book</th>
-                                                <th>Quantity</th>
-                                                <th>Price</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Introduction to Computer Science</td>
-                                                <td>
-                                                    <input type="number" class="form-control form-control-sm" value="1" min="1">
-                                                </td>
-                                                <td>$49.99</td>
-                                                <td>$49.99</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
-                                                <td>$49.99</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3" class="text-end"><strong>Shipping:</strong></td>
-                                                <td>$5.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                                                <td><strong>$54.99</strong></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary">Create Order</button>
-                                <a href="/orders/c/list" class="btn btn-outline-secondary">Cancel</a>
-                            </div>
-                        </form>
-                    </div>
+{% extends "components/layout.html" %} {% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-body p-5">
+          <h2 class="text-center mb-4">Create New Order</h2>
+          <form action="/orders/c/create/1" method="POST">
+            <!-- Customer Information -->
+            <div class="mb-4">
+              <h4>Customer Information</h4>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="firstName" class="form-label">First Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="firstName"
+                    name="firstName"
+                    required
+                  />
                 </div>
+                <div class="col-md-6 mb-3">
+                  <label for="lastName" class="form-label">Last Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="lastName"
+                    name="lastName"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label">Phone</label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="phone"
+                  name="phone"
+                  required
+                />
+              </div>
             </div>
+
+            <!-- Shipping Information -->
+            <div class="mb-4">
+              <h4>Shipping Information</h4>
+              <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <textarea
+                  class="form-control"
+                  id="address"
+                  name="address"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="city" class="form-label">City</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="city"
+                    name="city"
+                    required
+                  />
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label for="state" class="form-label">State</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="state"
+                    name="state"
+                    required
+                  />
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label for="zipCode" class="form-label">ZIP Code</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="zipCode"
+                    name="zipCode"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="mb-4">
+              <h4>Order Items</h4>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Book</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Introduction to Computer Science</td>
+                      <td>
+                        <input
+                          type="number"
+                          class="form-control form-control-sm"
+                          value="1"
+                          min="1"
+                        />
+                      </td>
+                      <td>$49.99</td>
+                      <td>$49.99</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="3" class="text-end">
+                        <strong>Subtotal:</strong>
+                      </td>
+                      <td>$49.99</td>
+                    </tr>
+                    <tr>
+                      <td colspan="3" class="text-end">
+                        <strong>Shipping:</strong>
+                      </td>
+                      <td>$5.00</td>
+                    </tr>
+                    <tr>
+                      <td colspan="3" class="text-end">
+                        <strong>Total:</strong>
+                      </td>
+                      <td><strong>$54.99</strong></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">
+                Create Order
+              </button>
+              <a href="/orders/c/list" class="btn btn-outline-secondary"
+                >Cancel</a
+              >
+            </div>
+          </form>
         </div>
+      </div>
     </div>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

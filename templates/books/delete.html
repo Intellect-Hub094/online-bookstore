@@ -1,33 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete Book - University Library Bookstore</title>
-    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
-    <link href="/style.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow">
-                    <div class="card-body p-5 text-center">
-                        <i class="fas fa-exclamation-triangle text-warning display-1 mb-4"></i>
-                        <h2 class="mb-4">Delete Book</h2>
-                        <p class="mb-4">Are you sure you want to delete "<strong>Introduction to Computer Science</strong>"? This action cannot be undone.</p>
-                        <form action="/books/a/delete/1" method="POST">
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-danger">Yes, Delete Book</button>
-                                <a href="/books/a/view/1" class="btn btn-outline-secondary">Cancel</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+{% extends "components/layout.html" %} {% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body p-5 text-center">
+          <i
+            class="fas fa-exclamation-triangle text-warning display-1 mb-4"
+          ></i>
+          <h2 class="mb-4">Delete Book</h2>
+          <p class="mb-4">
+            Are you sure you want to delete "<strong
+              >Introduction to Computer Science</strong
+            >"? This action cannot be undone.
+          </p>
+          <form action="/books/a/delete/1" method="POST">
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-danger">
+                Yes, Delete Book
+              </button>
+              <a href="/books/a/view/1" class="btn btn-outline-secondary"
+                >Cancel</a
+              >
             </div>
+          </form>
         </div>
+      </div>
     </div>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

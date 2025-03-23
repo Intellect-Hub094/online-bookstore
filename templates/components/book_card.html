@@ -1,0 +1,11 @@
+{% macro book_card(book) %}
+<div class="card h-100">
+    <img src="{{ book.cover_image|default('https://via.placeholder.com/200x300') }}" class="card-img-top" alt="{{ book.title }}">
+    <div class="card-body">
+        <h5 class="card-title">{{ book.title }}</h5>
+        <p class="card-text">{{ book.author }}</p>
+        <p class="card-text"><small class="text-muted">${{ "%.2f"|format(book.price) }}</small></p>
+        <a href="/books/c/view/{{ book.id }}" class="btn btn-primary">View Details</a>
+    </div>
+</div>
+{% endmacro %}
