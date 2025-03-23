@@ -6,7 +6,7 @@ cart_bp = Blueprint("cart", __name__)
 
 
 @cart_bp.route("/")
-@login_required
+# @login_required
 def view_cart():
     cart_items = Cart.query.filter_by(user_id=current_user.id).all()
     total = sum(item.book.price * item.quantity for item in cart_items)
@@ -14,7 +14,7 @@ def view_cart():
 
 
 @cart_bp.route("/add/<int:book_id>")
-@login_required
+# @login_required
 def add_to_cart(book_id):
     book = Book.query.get_or_404(book_id)
     cart_item = Cart.query.filter_by(user_id=current_user.id, book_id=book_id).first()
@@ -31,7 +31,7 @@ def add_to_cart(book_id):
 
 
 @cart_bp.route("/delete/<int:book_id>")
-@login_required
+# @login_required
 def delete_from_cart(book_id):
     cart_item = Cart.query.filter_by(
         user_id=current_user.id, book_id=book_id

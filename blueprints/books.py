@@ -21,7 +21,7 @@ def view_book(book_id):
 
 
 @books_bp.route("/create", methods=["GET", "POST"])
-@login_required
+# @login_required
 def create_book():
     form = BookForm()
     if form.validate_on_submit():

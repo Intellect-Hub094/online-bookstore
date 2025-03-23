@@ -8,7 +8,7 @@ checkout_bp = Blueprint("checkout", __name__)
 
 
 @checkout_bp.route("/")
-@login_required
+# @login_required
 def checkout():
     cart_items = Cart.query.filter_by(user_id=current_user.id).all()
     if not cart_items:
