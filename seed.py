@@ -33,19 +33,22 @@ def clear_data():
 def create_sample_data():
     # Create sample users
     admin_user = User(
-        username="admin",
+        first_name="Admin",
+        last_name="User",
         email="admin@example.com",
         password=generate_password_hash("adminpass"),
         role="admin",
     )
     customer_user = User(
-        username="customer",
+        first_name="Customer",
+        last_name="User",
         email="customer@example.com",
         password=generate_password_hash("customerpass"),
         role="customer",
     )
     driver_user = User(
-        username="driver",
+        first_name="Driver",
+        last_name="User",
         email="driver@example.com",
         password=generate_password_hash("driverpass"),
         role="driver",
