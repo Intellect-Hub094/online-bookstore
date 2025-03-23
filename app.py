@@ -12,6 +12,7 @@ from blueprints.books import books_bp
 from blueprints.cart import cart_bp
 from blueprints.orders import orders_bp
 from blueprints.checkout import checkout_bp
+from blueprints.wishlist import wishlist_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -26,14 +27,17 @@ app.register_blueprint(books_bp, url_prefix="/books")
 app.register_blueprint(cart_bp, url_prefix="/cart")
 app.register_blueprint(orders_bp, url_prefix="/orders")
 app.register_blueprint(checkout_bp, url_prefix="/checkout")
+app.register_blueprint(wishlist_bp, url_prefix="/wishlist")
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "auth.login"
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 @app.route("/")
 def index():
