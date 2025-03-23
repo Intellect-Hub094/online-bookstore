@@ -4,11 +4,6 @@ from forms import DriverOnboardingForm, CustomerOnboardingForm
 kyc_bp = Blueprint("kyc", __name__)
 
 
-@kyc_bp.route("/terms-and-conditions")
-def terms_and_conditions():
-    return render_template("kyc/terms_and_conditions.html")
-
-
 @kyc_bp.route("/onboarding/driver", methods=["GET", "POST"])
 def driver_onboarding():
     form = DriverOnboardingForm()

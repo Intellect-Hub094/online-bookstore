@@ -13,7 +13,7 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(50))
 
     def __repr__(self):
-        return f"<User {self.username}>"
+        return f"<User {self.id}>"
 
 
 class Driver(db.Model):
@@ -25,7 +25,7 @@ class Driver(db.Model):
     user = db.relationship("User", backref=db.backref("driver", uselist=False))
 
     def __repr__(self):
-        return f"<Driver {self.user.username}>"
+        return f"<Driver {self.user.id}>"
 
 
 class Customer(db.Model):
@@ -36,7 +36,7 @@ class Customer(db.Model):
     user = db.relationship("User", backref=db.backref("customer", uselist=False))
 
     def __repr__(self):
-        return f"<Customer {self.user.username}>"
+        return f"<Customer {self.user.id}>"
 
 
 class Admin(db.Model):
@@ -46,7 +46,7 @@ class Admin(db.Model):
     user = db.relationship("User", backref=db.backref("admin", uselist=False))
 
     def __repr__(self):
-        return f"<Admin {self.user.username}>"
+        return f"<Admin {self.user.id}>"
 
 
 class Book(db.Model):
