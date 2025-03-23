@@ -1,25 +1,30 @@
 from flask import Flask, render_template, url_for
 from flask_migrate import Migrate
+
 from config import Config
+from models import db
 
 from blueprints.auth import auth_bp
 from blueprints.kyc import kyc_bp
 from blueprints.api.v1 import api_v1_bp
+from blueprints.books import books_bp
+from blueprints.cart import cart_bp
+from blueprints.orders import orders_bp
+from blueprints.checkout import checkout_bp
 
-from models import db
-
-app = Flask(__name__, static_folder="static")
-
-# Load configuration
+app = Flask(__name__)
 app.config.from_object(Config)
 
-# Initialize database and migration
 db.init_app(app)
 migrate = Migrate(app, db)
 
 app.register_blueprint(api_v1_bp, url_prefix="/api/v1")
 app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(kyc_bp, url_prefix="/kyc")
+app.register_blueprint(books_bp, url_prefix="/books")
+app.register_blueprint(cart_bp, url_prefix="/cart")
+app.register_blueprint(orders_bp, url_prefix="/orders")
+app.register_blueprint(checkout_bp, url_prefix="/checkout")
 
 
 @app.route("/")
