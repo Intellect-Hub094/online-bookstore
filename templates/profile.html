@@ -6,19 +6,32 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
+          {% with messages = get_flashed_messages(with_categories=true) %} {% if
+          messages %} {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            <p>{{ message }}</p>
+          </div>
+          {% endfor %} {% endif %} {% endwith %}
           <form method="POST">
             {{ form.csrf_token }}
-            <div class="mb-3">
-              <label class="form-label">Username</label>
-              {{ form.username(class="form-control") }} {% if
-              form.username.errors %}
-              <div class="text-danger">{{ form.username.errors[0] }}</div>
-              {% endif %}
-            </div>
             <div class="mb-3">
               <label class="form-label">Email</label>
               {{ form.email(class="form-control") }} {% if form.email.errors %}
               <div class="text-danger">{{ form.email.errors[0] }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">First Name</label>
+              {{ form.first_name(class="form-control") }} {% if
+              form.first_name.errors %}
+              <div class="text-danger">{{ form.first_name.errors[0] }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Last Name</label>
+              {{ form.last_name(class="form-control") }} {% if
+              form.last_name.errors %}
+              <div class="text-danger">{{ form.last_name.errors[0] }}</div>
               {% endif %}
             </div>
             <div class="mb-3">
