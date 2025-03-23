@@ -13,6 +13,8 @@ from blueprints.cart import cart_bp
 from blueprints.orders import orders_bp
 from blueprints.checkout import checkout_bp
 from blueprints.wishlist import wishlist_bp
+from blueprints.profile import profile_bp
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -28,6 +30,7 @@ app.register_blueprint(cart_bp, url_prefix="/cart")
 app.register_blueprint(orders_bp, url_prefix="/orders")
 app.register_blueprint(checkout_bp, url_prefix="/checkout")
 app.register_blueprint(wishlist_bp, url_prefix="/wishlist")
+app.register_blueprint(profile_bp, url_prefix="/profile")
 
 login_manager = LoginManager()
 login_manager.init_app(app)

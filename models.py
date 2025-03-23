@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -16,6 +17,7 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f"<User {self.username}>"
 
+
 class Driver(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
@@ -27,6 +29,7 @@ class Driver(db.Model):
     def __repr__(self):
         return f"<Driver {self.user.username}>"
 
+
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
@@ -37,6 +40,7 @@ class Customer(db.Model):
     def __repr__(self):
         return f"<Customer {self.user.username}>"
 
+
 class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
@@ -45,6 +49,7 @@ class Admin(db.Model):
 
     def __repr__(self):
         return f"<Admin {self.user.username}>"
+
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -58,6 +63,7 @@ class Book(db.Model):
 
     def __repr__(self):
         return f"<Book {self.title}>"
+
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -75,6 +81,7 @@ class Order(db.Model):
     def __repr__(self):
         return f"<Order {self.id}>"
 
+
 class Purchase(db.Model):  # OrderItem
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey("order.id"), nullable=False)
@@ -87,6 +94,7 @@ class Purchase(db.Model):  # OrderItem
     def __repr__(self):
         return f"<Purchase {self.quantity} x {self.book.title}>"
 
+
 class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey("customer.id"), nullable=False)
@@ -98,6 +106,7 @@ class Cart(db.Model):
 
     def __repr__(self):
         return f"<Cart Item: {self.book.title}>"
+
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -113,6 +122,7 @@ class Transaction(db.Model):
 
     def __repr__(self):
         return f"<Transaction {self.id}>"
+
 
 class Wishlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
