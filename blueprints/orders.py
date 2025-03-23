@@ -12,7 +12,7 @@ def list_orders():
     return render_template("orders/list.html", orders=orders)
 
 
-@orders_bp.route("/orders/<int:order_id>")
+@orders_bp.route("/<int:order_id>")
 @login_required
 def view_order(order_id):
     order = Order.query.filter_by(id=order_id, user_id=current_user.id).first_or_404()

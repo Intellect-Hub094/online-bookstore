@@ -5,19 +5,22 @@ from models import Book, db
 from forms.books import BookForm
 import os
 
-books_bp = Blueprint('books', __name__)
+books_bp = Blueprint("books", __name__)
 
-@books_bp.route('/books')
+
+@books_bp.route("/")
 def list_books():
     books = Book.query.all()
-    return render_template('books/list.html', books=books)
+    return render_template("books/list.html", books=books)
 
-@books_bp.route('/books/<int:book_id>')
+
+@books_bp.route("/<int:book_id>")
 def view_book(book_id):
     book = Book.query.get_or_404(book_id)
-    return render_template('books/view.html', book=book)
+    return render_template("books/view.html", book=book)
 
-@books_bp.route('/books/create', methods=['GET', 'POST'])
+
+@books_bp.route("/create", methods=["GET", "POST"])
 @login_required
 def create_book():
     form = BookForm()
@@ -28,15 +31,15 @@ def create_book():
             isbn=form.isbn.data,
             price=form.price.data,
             stock=form.stock.data,
-            description=form.description.data
+            description=form.description.data,
         )
         if form.cover_image.data:
             filename = secure_filename(form.cover_image.data.filename)
-            form.cover_image.data.save(os.path.join('static/uploads', filename))
+            form.cover_image.data.save(os.path.join("static/uploads", filename))
             book.cover_image = filename
-        
+
         db.session.add(book)
         db.session.commit()
-        flash('Book created successfully!', 'success')
-        return redirect(url_for('books.list_books'))
-    return render_template('books/create.html', form=form)
+        flash("Book created successfully!", "success")
+        return redirect(url_for("books.list_books"))
+    return render_template("books/create.html", form=form)
