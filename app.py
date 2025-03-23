@@ -1,28 +1,26 @@
-# app.py
-from flask import Flask
-from extensions import db, login_manager, Migrate
-from config import Config
-from routes.auth import auth_bp
-from routes.admin import admin_bp
-from routes.user import user_bp
-from routes.book import book_bp
-from routes.transaction import transaction_bp
+from flask import Flask, render_template
+from flask_migrate import Migrate
 
-# Initialize Flask app
+from db import init_db
+
 app = Flask(__name__)
-app.config.from_object(Config)
-
-# Initialize extensions
-db.init_app(app)
-login_manager.init_app(app)
-Migrate.init_app(app, db)  # Initialize Flask-Migrate with app and db
+db = init_db(app)
+migrate = Migrate(app, db)
 
 # Register blueprints
-app.register_blueprint(auth_bp)
-app.register_blueprint(admin_bp)
-app.register_blueprint(user_bp)
-app.register_blueprint(book_bp)
-app.register_blueprint(transaction_bp)
+from blueprints.auth import auth_bp
+from blueprints.kyc import kyc_bp
+from blueprints.api.v1 import api_v1_bp
+
+app.register_blueprint(api_v1_bp, url_prefix="/api/v1")
+app.register_blueprint(auth_bp, url_prefix="/auth")
+app.register_blueprint(kyc_bp, url_prefix="/kyc")
+
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

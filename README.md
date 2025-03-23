@@ -1,9 +1,39 @@
-# README
+# University Library Online Bookstore
 
-This is the [Flask](http://flask.pocoo.org/) [quick start](http://flask.pocoo.org/docs/1.0/quickstart/#a-minimal-application) example for [Render](https://render.com).
+## Description
 
-The app in this repo is deployed at [https://flask.onrender.com](https://flask.onrender.com).
+This is a Flask-based web application for a university library online bookstore. It allows users to browse and purchase books online.
 
-## Deployment
+## Features
 
-Follow the guide at https://render.com/docs/deploy-flask.
+- User authentication (login, registration)
+- KYC (Know Your Customer) functionality
+- Browse books
+- Purchase books
+
+## Installation
+
+1.  Clone the repository:
+
+    ```bash
+    git clone <repository_url>
+    ```
+
+2.  Create a virtual environment:
+
+    ```bash
+    python3 -m pip install pipenv
+    python3 -m pipenv shell
+    ```
+
+3.  Install dependencies:
+
+    ```bash
+    pipenv install
+    ```
+
+## Running the Application
+
+```bash
+flask run
+```
