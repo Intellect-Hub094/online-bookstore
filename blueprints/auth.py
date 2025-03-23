@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, g, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import User, db
@@ -20,11 +20,15 @@ def login():
             next_page = request.args.get("next")
             return redirect(next_page or url_for("index"))
         flash("Invalid email or password")
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"Error in {getattr(form, field).label.text}: {error}")
     return render_template("auth/login.html", form=form)
 
 
 @auth_bp.route("/logout")
-# @login_required
+@login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))

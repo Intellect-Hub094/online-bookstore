@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, g, session
 from flask_migrate import Migrate
 from flask_login import LoginManager
 
@@ -42,9 +42,16 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+@app.before_request
+def load_user():
+    g.user = None
+    if '_user_id' in session:
+        g.user = User.query.get(session['_user_id'])
+
+
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", user=g.user)
 
 
 if __name__ == "__main__":

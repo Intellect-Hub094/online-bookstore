@@ -23,12 +23,18 @@
                             <i class="fas fa-shopping-cart"></i> Cart
                         </a>
                     </li>
+                    {% if user %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/logout">Logout</a>
+                    </li>
+                    {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="/auth/login">Login</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/auth/register">Register</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

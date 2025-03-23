@@ -16,6 +16,7 @@ gunicorn = "*"
 psycopg2 = "*"
 black = "*"
 flask-migrate = "*"
+email-validator = "*"
 
 [dev-packages]
 
