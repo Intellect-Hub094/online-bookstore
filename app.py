@@ -1,9 +1,14 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from flask_migrate import Migrate
+from config import Config
 
 from db import init_db
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
+
+# Load configuration
+app.config.from_object(Config)
+
 db = init_db(app)
 migrate = Migrate(app, db)
 
