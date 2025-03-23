@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details - University Library Bookstore</title>
+    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-5">
+        <div class="row">
+            <!-- Book Image -->
+            <div class="col-md-4">
+                <img src="https://via.placeholder.com/400x600" class="img-fluid rounded" alt="Book Cover">
+                <!-- Admin Controls -->
+                <div class="admin-controls mt-3" style="display: none;">
+                    <div class="d-grid gap-2">
+                        <a href="/books/a/edit/1" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Edit Book
+                        </a>
+                        <a href="/books/a/delete/1" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete Book
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Book Details -->
+            <div class="col-md-8">
+                <h1 class="mb-3">Introduction to Computer Science</h1>
+                <h5 class="text-muted mb-4">By John Smith</h5>
+                
+                <div class="mb-4">
+                    <h3 class="text-primary mb-3">$49.99</h3>
+                    <div class="d-flex gap-2 mb-3">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <button class="btn btn-outline-secondary wishlist-toggle">
+                            <i class="far fa-heart"></i> Add to Wishlist
+                        </button>
+                    </div>
+                    <p class="text-success">
+                        <i class="fas fa-check-circle"></i> In Stock (5 copies available)
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <h4>Book Details</h4>
+                    <table class="table">
+                        <tr>
+                            <th>ISBN:</th>
+                            <td>978-0-123456-78-9</td>
+                        </tr>
+                        <tr>
+                            <th>Category:</th>
+                            <td>Textbook</td>
+                        </tr>
+                        <tr>
+                            <th>Publication Year:</th>
+                            <td>2023</td>
+                        </tr>
+                        <tr>
+                            <th>Edition:</th>
+                            <td>3rd Edition</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="mb-4">
+                    <h4>Description</h4>
+                    <p>A comprehensive introduction to computer science, covering fundamental concepts, programming basics, and modern computing principles. Perfect for beginners and students starting their journey in computer science.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

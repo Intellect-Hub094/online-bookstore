@@ -1,23 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Driver Onboarding</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Registration - University Library Bookstore</title>
+    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Driver Onboarding</h1>
-    <form method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.name.label }}<br>
-            {{ form.name(size=30) }}
-        </p>
-        <p>
-            {{ form.license_number.label }}<br>
-            {{ form.license_number(size=30) }}
-        </p>
-        <p>
-            {{ form.submit() }}
-        </p>
-    </form>
+<body class="bg-light">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-body p-5">
+                        <h2 class="text-center mb-4">Driver Registration</h2>
+                        <form action="/kyc/onboarding/driver" method="POST" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="licenseNumber" class="form-label">Driver's License Number</label>
+                                <input type="text" class="form-control" id="licenseNumber" name="licenseNumber" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="vehicleInfo" class="form-label">Vehicle Information</label>
+                                <textarea class="form-control" id="vehicleInfo" name="vehicleInfo" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="licenseImage" class="form-label">Upload Driver's License Image</label>
+                                <input type="file" class="form-control" id="licenseImage" name="licenseImage" accept="image/*" required>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    I agree to the <a href="/kyc/terms-and-conditions">Terms and Conditions</a>
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Submit Application</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

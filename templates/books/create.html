@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Book - University Library Bookstore</title>
+    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-body p-5">
+                        <h2 class="text-center mb-4">Add New Book</h2>
+                        <form action="/books/a/create/new" method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Book Title</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="author" class="form-label">Author</label>
+                                <input type="text" class="form-control" id="author" name="author" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="isbn" class="form-label">ISBN</label>
+                                    <input type="text" class="form-control" id="isbn" name="isbn" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="price" class="form-label">Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-select" id="category" name="category" required>
+                                    <option value="">Select a category</option>
+                                    <option value="textbook">Textbook</option>
+                                    <option value="research">Research Paper</option>
+                                    <option value="journal">Journal</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cover" class="form-label">Book Cover Image</label>
+                                <input type="file" class="form-control" id="cover" name="cover" accept="image/*" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="stock" class="form-label">Stock Quantity</label>
+                                <input type="number" class="form-control" id="stock" name="stock" min="0" required>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Add Book</button>
+                                <a href="/books/a/list" class="btn btn-outline-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
