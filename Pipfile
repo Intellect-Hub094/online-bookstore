@@ -10,12 +10,12 @@ wtforms = "*"
 types-wtforms = "*"
 python-dotenv = "*"
 flask-sqlalchemy = "*"
-flask-migrate = "*"
 flask-mail = "*"
 flask-login = "*"
 gunicorn = "*"
 psycopg2 = "*"
 black = "*"
+flask-migrate = "*"
 
 [dev-packages]
 
