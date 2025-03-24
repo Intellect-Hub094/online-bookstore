@@ -13,7 +13,7 @@ def _redirect_based_on_role():
     if current_user.role == "admin":
         return redirect(url_for("admin.admin_index"))
     if current_user.role == "driver":
-        return redirect(url_for("orders"))
+        return redirect(url_for("orders.list_orders"))
     if current_user.role == "customer":
         return redirect(url_for("books.list_books"))
     return redirect(url_for("index"))
