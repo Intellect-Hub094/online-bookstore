@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
-from models import Book, db
+from models import Book, db, Wishlist
 from forms.books import BookForm
 
 books_bp = Blueprint("books", __name__)
@@ -39,7 +39,11 @@ def list_books():
 @books_bp.route("/<int:book_id>")
 def view_book(book_id):
     book = Book.query.get_or_404(book_id)
-    return render_template("books/view.html", book=book)
+    wishlist_book_ids = []
+    if current_user.is_authenticated:
+        wishlist_items = Wishlist.query.filter_by(customer_id=current_user.customer.id).all()
+        wishlist_book_ids = [item.book_id for item in wishlist_items]
+    return render_template("books/view.html", book=book, wishlist_book_ids=wishlist_book_ids)
 
 
 @books_bp.route("/create", methods=["GET", "POST"])

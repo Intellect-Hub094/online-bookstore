@@ -17,11 +17,26 @@
       <p>{{ book.description }}</p>
 
       {% if current_user.is_authenticated %}
-      <a
-        href="{{ url_for('cart.add_to_cart', book_id=book.id) }}"
-        class="btn btn-primary"
-        >Add to Cart</a
-      >
+      <div class="btn-group gap-2" role="group">
+        <a
+          href="{{ url_for('cart.add_to_cart', book_id=book.id) }}"
+          class="btn btn-primary"
+          >Add to Cart</a
+        >
+        {% if book.id in wishlist_book_ids %}
+        <a
+          href="{{ url_for('wishlist.remove_from_wishlist', book_id=book.id) }}"
+          class="btn btn-danger"
+          >Remove from Wishlist</a
+        >
+        {% else %}
+        <a
+          href="{{ url_for('wishlist.add_to_wishlist', book_id=book.id) }}"
+          class="btn btn-outline-primary"
+          >Add to Wishlist</a
+        >
+        {% endif %}
+      </div>
       {% endif %}
     </div>
   </div>
