@@ -1,0 +1,25 @@
+{% if user %} {% if not user_onboarding_complete %}
+<div
+  class="alert alert-warning text-center d-flex align-items-center justify-content-center"
+  role="alert"
+>
+  <div>
+    <strong>Action Required:</strong>
+    {% if user.role == 'customer' %} Complete your customer profile to access
+    all booking features
+    <a
+      href="{{ url_for('kyc.customer_onboarding') }}"
+      class="btn btn-warning btn-sm ms-3"
+      >Complete Profile</a
+    >
+    {% elif user.role == 'driver' %} Complete your driver verification to start
+    accepting deliveries
+    <a
+      href="{{ url_for('kyc.driver_onboarding') }}"
+      class="btn btn-warning btn-sm ms-3"
+      >Verify Account</a
+    >
+    {% endif %}
+  </div>
+</div>
+{% endif %} {% endif %}

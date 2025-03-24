@@ -56,8 +56,30 @@ def create_sample_data():
         password=generate_password_hash("driverpass"),
         role="driver",
     )
+    incomplete_customer_user = User(
+        first_name="Incomplete",
+        last_name="Customer",
+        email="incomplete_customer@example.com",
+        password=generate_password_hash("incompletepass"),
+        role="customer",
+    )
+    incomplete_driver_user = User(
+        first_name="Incomplete",
+        last_name="Driver",
+        email="incomplete_driver@example.com",
+        password=generate_password_hash("incompletepass"),
+        role="driver",
+    )
 
-    db.session.add_all([admin_user, customer_user, driver_user])
+    db.session.add_all(
+        [
+            admin_user,
+            customer_user,
+            driver_user,
+            incomplete_customer_user,
+            incomplete_driver_user,
+        ]
+    )
     db.session.commit()
 
     # Create role-specific users with required fields
@@ -66,17 +88,19 @@ def create_sample_data():
         user_id=customer_user.id,
         phone="1234567890",
         address="123 Customer St",
-        student_id="STU123"
+        student_id="STU123",
     )
     driver = Driver(
         user_id=driver_user.id,
         license_number="DRIVER123",
         phone="0987654321",
         vehicle_info="Toyota Corolla 2020",
-        license_image="driver_license.jpg"
+        license_image="driver_license.jpg",
     )
 
-    db.session.add_all([admin, customer, driver])
+    db.session.add_all(
+        [admin, customer, driver]
+    )
     db.session.commit()
 
     # Create sample books
@@ -90,7 +114,7 @@ def create_sample_data():
         description="Start building websites and services with ASP.NET Core 9, Blazor, and EF Core 9. Ninth Edition.",
         category="Textbooks",
         faculty="Commerce",
-        cover_image="csharp.jpg"  # Added cover image
+        cover_image="csharp.jpg",  # Added cover image
     )
 
     book4 = Book(
@@ -103,7 +127,7 @@ def create_sample_data():
         description="Build powerful and reliable Python web applications from scratch. Fifth Edition.",
         category="Textbooks",
         faculty="Commerce",
-        cover_image="django.jpg"
+        cover_image="django.jpg",
     )
 
     book5 = Book(
@@ -116,7 +140,7 @@ def create_sample_data():
         description="An atypical design patterns guide for .NET 8, C#12, and beyond. Third Edition.",
         category="Textbooks",
         faculty="Commerce",
-        cover_image="aspnet.jpg"
+        cover_image="aspnet.jpg",
     )
 
     book6 = Book(
@@ -129,7 +153,7 @@ def create_sample_data():
         description="Build websites and services using mature and proven ASP.NET Core MVC, Web API, and Umbraco CMS.",
         category="Textbooks",
         faculty="Commerce",
-        cover_image="realworld.jpg"
+        cover_image="realworld.jpg",
     )
 
     book7 = Book(
@@ -142,7 +166,7 @@ def create_sample_data():
         description="A software engineering perspective toward designing real-time systems.",
         category="Textbooks",
         faculty="Commerce",
-        cover_image="realtime.jpg"
+        cover_image="realtime.jpg",
     )
 
     book9 = Book(
@@ -155,7 +179,7 @@ def create_sample_data():
         description="Kick-start your career with architecture design principles, strategies, and generative AI techniques. Third Edition.",
         category="Textbooks",
         faculty="Commerce",
-        cover_image="architect.jpg"
+        cover_image="architect.jpg",
     )
 
     book1 = Book(
@@ -168,7 +192,7 @@ def create_sample_data():
         description="Tackle computer science challenges with classic to modern algorithms in machine learning, software design, data systems, and cryptography. Second Edition.",
         category="Textbooks",
         faculty="Commerce",
-        cover_image="algorithms.jpg"
+        cover_image="algorithms.jpg",
     )
 
     book2 = Book(
@@ -181,7 +205,7 @@ def create_sample_data():
         description="Learn to analyze and mitigate risks in your software projects.",
         category="Textbooks",
         faculty="Commerce",
-        cover_image="security.jpg"
+        cover_image="security.jpg",
     )
 
     book8 = Book(
@@ -194,7 +218,7 @@ def create_sample_data():
         description="Master advanced Java techniques for cloud-based applications through concurrency and parallelism.",
         category="Textbooks",
         faculty="Computer Science",
-        cover_image="java.jpg"
+        cover_image="java.jpg",
     )
 
     db.session.add(book1)
@@ -251,8 +275,8 @@ def create_sample_data():
             "payment_id": "pf_123456",
             "payment_status": "success",
             "merchant_id": "10000100",
-            "timestamp": datetime.now().isoformat()
-        }
+            "timestamp": datetime.now().isoformat(),
+        },
     )
     db.session.add(transaction)
     db.session.commit()
@@ -263,6 +287,7 @@ def create_sample_data():
     )
     db.session.add(wishlist_item)
     db.session.commit()
+
 
 if __name__ == "__main__":
     with app.app_context():

@@ -1,41 +1,52 @@
 {% extends "components/layout.html" %} {% block content %}
 <div class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %} {% for category, message in messages %}
+  <div class="alert alert-{{ category }}" role="alert">
+    <p>{{ message }}</p>
+  </div>
+  {% endfor %} {% endif %} {% endwith %}
   <div class="row justify-content-center mt-5">
     <div class="col-md-8">
       <div class="card shadow">
         <div class="card-body p-5">
           <h2 class="text-center mb-4">Driver Registration</h2>
-          <form method="POST" action="{{ url_for('kyc.driver_onboarding') }}" enctype="multipart/form-data">
+          <form
+            method="POST"
+            action="{{ url_for('kyc.driver_onboarding') }}"
+            enctype="multipart/form-data"
+          >
             {{ form.hidden_tag() }}
+            <input type="hidden" name="from_banner" value="true" />
             <div class="row">
               <div class="col-md-6 mb-3">
-                {{ form.first_name.label(class="form-label") }}
-                {{ form.first_name(class="form-control") }}
+                {{ form.first_name.label(class="form-label") }} {{
+                form.first_name(class="form-control") }}
               </div>
               <div class="col-md-6 mb-3">
-                {{ form.last_name.label(class="form-label") }}
-                {{ form.last_name(class="form-control") }}
+                {{ form.last_name.label(class="form-label") }} {{
+                form.last_name(class="form-control") }}
               </div>
             </div>
             <div class="mb-3">
-              {{ form.phone.label(class="form-label") }}
-              {{ form.phone(class="form-control") }}
+              {{ form.phone.label(class="form-label") }} {{
+              form.phone(class="form-control") }}
             </div>
             <div class="mb-3">
-              {{ form.license_number.label(class="form-label") }}
-              {{ form.license_number(class="form-control") }}
+              {{ form.license_number.label(class="form-label") }} {{
+              form.license_number(class="form-control") }}
             </div>
             <div class="mb-3">
-              {{ form.vehicle_info.label(class="form-label") }}
-              {{ form.vehicle_info(class="form-control") }}
+              {{ form.vehicle_info.label(class="form-label") }} {{
+              form.vehicle_info(class="form-control") }}
             </div>
             <div class="mb-3">
-              {{ form.license_image.label(class="form-label") }}
-              {{ form.license_image(class="form-control") }}
+              {{ form.license_image.label(class="form-label") }} {{
+              form.license_image(class="form-control") }}
             </div>
             <div class="mb-3 form-check">
-              {{ form.terms(class="form-check-input") }}
-              {{ form.terms.label(class="form-check-label") }}
+              {{ form.terms(class="form-check-input") }} {{
+              form.terms.label(class="form-check-label") }}
             </div>
             {{ form.submit(class="btn btn-primary w-100") }}
           </form>

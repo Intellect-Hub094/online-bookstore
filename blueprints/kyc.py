@@ -2,7 +2,7 @@ import os
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, redirect, url_for, flash, current_app
-from flask_login import login_user
+from flask_login import current_user
 from forms.kyc.onboarding.driver_form import DriverOnboardingForm
 from forms.kyc.onboarding.customer_form import CustomerOnboardingForm
 from models import db, User, Driver, Customer
@@ -26,21 +26,8 @@ def driver_onboarding():
         # Handle license image upload
         license_image_path = save_license_image(form.license_image.data)
 
-        # Update new user
-        current_user = current_user()
-        user = User(
-            **current_user,
-            first_name=form.first_name.data,
-            last_name=form.last_name.data
-        )
+        user = User.query.filter_by(email=current_user.email).first()
 
-        # Check if user is already a driver
-        driver = Driver.query.filter_by(user_id=user.id).first()
-        if driver:
-            flash("You are already a registered driver!", "danger")
-            return redirect(url_for("orders.list_orders"))
-
-        # Create new driver
         driver = Driver(
             user=user,
             phone=form.phone.data,
@@ -54,7 +41,7 @@ def driver_onboarding():
             db.session.add(driver)
             db.session.commit()
             flash("Driver registration successful!", "success")
-            return redirect(url_for("auth.login"))
+            return redirect(url_for("orders.list_orders"))
         except Exception as e:
             db.session.rollback()
             flash("Registration failed. Please try again.", "danger")
@@ -67,22 +54,23 @@ def driver_onboarding():
 def customer_onboarding():
     form = CustomerOnboardingForm()
     if form.validate_on_submit():
-        user = User(
-            first_name=form.first_name.data,
-            last_name=form.last_name.data,
-            email=form.email.data,
-            role="customer",
-        )
+        user = User.query.filter_by(email=current_user.email).first()
         customer = Customer(
             user=user,
             phone=form.phone.data,
             address=form.address.data,
-            student_id=form.student_id.data,  # New field
-            # Add other customer-specific fields here
+            student_id=form.student_id.data,
         )
-        db.session.add(user)
-        db.session.add(customer)
-        db.session.commit()
-        flash("Customer registration successful!", "success")
-        return redirect(url_for("index"))
+
+        try:
+            db.session.add(user)
+            db.session.add(customer)
+            db.session.commit()
+            flash("Customer registration successful!", "success")
+            return redirect(url_for("index"))
+        except Exception as e:
+            db.session.rollback()
+            flash("Registration failed. Please try again.", "danger")
+            return redirect(url_for("kyc.customer_onboarding"))
+
     return render_template("kyc/onboarding/customer.html", form=form)

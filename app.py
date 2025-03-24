@@ -3,7 +3,13 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 
 from config import Config
-from models import db, Book, User
+from models import (
+    db,
+    Book,
+    User,
+    Driver,
+    Customer,
+)  # Add Driver and Customer imports, Driver, Customer
 
 from blueprints.auth import auth_bp
 from blueprints.admin import admin_bp
@@ -53,7 +59,21 @@ def load_user():
 
 @app.context_processor
 def inject_user():
-    return dict(user=g.user)
+    user_data = {"user": g.user, "user_onboarding_complete": False}
+
+    if g.user:
+        if g.user.role == "admin":
+            user_data["user_onboarding_complete"] = True
+        elif g.user.role == "driver":
+            user_data["user_onboarding_complete"] = (
+                Driver.query.filter_by(user_id=g.user.id).first() is not None
+            )
+        elif g.user.role == "customer":
+            user_data["user_onboarding_complete"] = (
+                Customer.query.filter_by(user_id=g.user.id).first() is not None
+            )
+
+    return user_data
 
 
 @app.route("/")
