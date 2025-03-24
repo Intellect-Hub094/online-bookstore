@@ -35,7 +35,7 @@
           <div class="d-flex justify-content-around">
             {% for book_index in book_index_group %}
             <img
-              src="{{ url_for('static', filename='img/books/' + book_index|string + '.jpg') }}"
+              src="{{ url_for('static', filename='uploads/books/' + book_index|string + '.jpg') }}"
               class="d-block w-25"
               alt="{{ book_index }}"
             />
