@@ -9,11 +9,11 @@
         method="GET"
       >
         <input
-          class="form-control me-2"
-          type="search"
+          type="text"
+          class="form-control"
+          name="search"
           placeholder="Search books..."
-          name="q"
-          aria-label="Search"
+          value="{{ request.args.get('search', '') }}"
         />
         <button class="btn btn-outline-primary" type="submit">Search</button>
       </form>
