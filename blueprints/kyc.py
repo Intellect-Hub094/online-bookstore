@@ -12,7 +12,7 @@ kyc_bp = Blueprint("kyc", __name__)
 
 def save_license_image(file):
     filename = secure_filename(file.filename)
-    upload_dir = os.path.join(current_app.root_path, "static", "uploads", "licenses")
+    upload_dir = os.path.join(current_app.config["DRIVER_LICENSE_UPLOAD_FOLDER"], filename)
     os.makedirs(upload_dir, exist_ok=True)
     file_path = os.path.join(upload_dir, filename)
     file.save(file_path)
