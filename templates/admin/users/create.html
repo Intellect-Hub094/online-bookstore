@@ -1,0 +1,47 @@
+{% extends "components/layout.html" %} {% block content %}
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h3>Create New {{ role|title }}</h3>
+      <div class="btn-group mb-3">
+        <a
+          href="{{ url_for('admin.create_user', role='customer') }}"
+          class="btn btn-{{ 'primary' if role == 'customer' else 'secondary' }}"
+          >Customer</a
+        >
+        <a
+          href="{{ url_for('admin.create_user', role='driver') }}"
+          class="btn btn-{{ 'primary' if role == 'driver' else 'secondary' }}"
+          >Driver</a
+        >
+        <a
+          href="{{ url_for('admin.create_user', role='admin') }}"
+          class="btn btn-{{ 'primary' if role == 'admin' else 'secondary' }}"
+          >Admin</a
+        >
+      </div>
+    </div>
+    <div class="card-body">
+      <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }} {% for field in form if field.type not in
+        ['CSRFTokenField', 'SubmitField', 'BooleanField'] %}
+        <div class="mb-3">
+          {{ field.label(class="form-label") }} {{ field(class="form-control")
+          }} {% if field.errors %}
+          <div class="invalid-feedback d-block">{{ field.errors[0] }}</div>
+          {% endif %}
+        </div>
+        {% endfor %} {% if form.terms is defined %}
+        <div class="mb-3">
+          {{ form.terms(class="form-check-input") }} {{
+          form.terms.label(class="form-check-label") }}
+        </div>
+        {% endif %} {{ form.submit(class="btn btn-primary") }}
+        <a href="{{ url_for('admin.list_users') }}" class="btn btn-secondary"
+          >Cancel</a
+        >
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

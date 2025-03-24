@@ -67,8 +67,8 @@ class Book(db.Model):
     faculty = db.Column(db.String(50), nullable=False)
 
     @staticmethod
-    def get_low_stock_books(threshold=5):
-        return Book.query.filter(Book.stock < threshold).all()
+    def get_low_stock_books(threshold=10):  
+        return Book.query.filter(Book.stock <= threshold).all()
 
     def __repr__(self):
         return f"<Book {self.title}>"

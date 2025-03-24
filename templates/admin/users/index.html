@@ -1,0 +1,113 @@
+{% extends "components/layout.html" %} {% block content %}
+<div class="container mt-4">
+  <!-- Quick Stats -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card bg-primary text-white">
+        <div class="card-body">
+          <h5 class="card-title">Total Users</h5>
+          <h2>{{ total_users }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <h5 class="card-title">Customers</h5>
+          <h2>{{ customer_count }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-info text-white">
+        <div class="card-body">
+          <h5 class="card-title">Drivers</h5>
+          <h2>{{ driver_count }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-warning text-white">
+        <div class="card-body">
+          <h5 class="card-title">Admins</h5>
+          <h2>{{ admin_count }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Quick Actions</h5>
+        </div>
+        <div class="card-body">
+          <a
+            href="{{ url_for('admin.create_user', role='customer') }}"
+            class="btn btn-primary me-2"
+            >Add User</a
+          >
+          <a href="{{ url_for('admin.list_users') }}" class="btn btn-info"
+            >View All Users</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Registrations -->
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h5>Recent Registrations</h5>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in recent_users %}
+              <tr>
+                <td>{{ user.email }}</td>
+                <td>
+                  <span class="badge bg-{{ user.role }}">{{ user.role }}</span>
+                </td>
+                <td>
+                  <a
+                    href="{{ url_for('admin.view_user', user_id=user.id) }}"
+                    class="btn btn-sm btn-info"
+                    >View</a
+                  >
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h5>User Distribution</h5>
+        </div>
+        <div class="card-body">
+          <!-- Placeholder for a pie chart showing user type distribution -->
+          <div id="userDistributionChart" style="height: 300px">
+            <!-- Add chart initialization code in a script block -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

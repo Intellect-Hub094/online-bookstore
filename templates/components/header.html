@@ -33,7 +33,13 @@
           </li>
           {% endif %} {% if user.role == "admin" %}
           <li class="nav-item">
-            <a class="nav-link" href="/users">User Management</a>
+            <a class="nav-link" href="/admin">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/users/dashboard">User Management</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/orders">Orders</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/purchases">Purchases</a>
