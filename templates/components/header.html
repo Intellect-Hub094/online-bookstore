@@ -46,7 +46,15 @@
             <li class="nav-item">
               <a class="nav-link" href="/purchases">Purchases</a>
             </li>
-            {% endif %} {% endif %}
+            {% endif %} 
+            
+            {% if user.role == "driver" %}
+            <li class="nav-item">
+              <a class="nav-link" href="/orders">Orders</a>
+            </li>
+
+            {% endif %}
+            {% endif %}
           </ul>
           <ul class="navbar-nav">
             <!-- Logged in user -->
