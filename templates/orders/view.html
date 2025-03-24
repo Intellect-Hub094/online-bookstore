@@ -49,7 +49,10 @@
     </div>
     
     <div class="mt-4">
-        <a href="{{ url_for('orders.list_orders') }}" class="btn btn-primary">Back to Orders</a>
+        {% if current_user.role == 'admin' %}
+        <a href="{{ url_for('orders.edit_order', order_id=order.id) }}" class="btn btn-primary">Edit Order</a>
+        {% endif %}
+        <a href="{{ url_for('orders.list_orders') }}" class="btn btn-secondary">Back to Orders</a>
     </div>
 </div>
 {% endblock %}
