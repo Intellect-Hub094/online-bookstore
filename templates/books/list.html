@@ -11,10 +11,10 @@
     <div class="card mb-4">
         <div class="card-body">
             <form class="row g-3" method="get" action="{{ url_for('books.list_books') }}">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <input type="text" class="form-control" name="search" placeholder="Search books..." value="{{ request.args.get('search', '') }}">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <select class="form-select" name="category">
                         <option value="">Category</option>
                         <option value="Textbooks" {% if request.args.get('category') == 'Textbooks' %}selected{% endif %}>Textbooks</option>
@@ -22,7 +22,7 @@
                         <option value="Journals" {% if request.args.get('category') == 'Journals' %}selected{% endif %}>Journals</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <select class="form-select" name="faculty">
                         <option value="">Faculty</option>
                         <option value="Engineering" {% if request.args.get('faculty') == 'Engineering' %}selected{% endif %}>Engineering</option>
