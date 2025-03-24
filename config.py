@@ -11,6 +11,10 @@ class Config:
     # PayFast keys
     PAYFAST_MERCHANT_ID = os.getenv("PAYFAST_MERCHANT_ID")
     PAYFAST_MERCHANT_KEY = os.getenv("PAYFAST_MERCHANT_KEY")
+    PAYFAST_PASSPHRASE = os.getenv('PAYFAST_PASSPHRASE')
+    PAYFAST_RETURN_URL = os.getenv('PAYFAST_RETURN_URL', 'http://localhost:5000/checkout/return')
+    PAYFAST_CANCEL_URL = os.getenv('PAYFAST_CANCEL_URL', 'http://localhost:5000/checkout/cancel')
+    PAYFAST_NOTIFY_URL = os.getenv('PAYFAST_NOTIFY_URL', 'http://localhost:5000/checkout/notify')
 
     # Email configuration
     EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
