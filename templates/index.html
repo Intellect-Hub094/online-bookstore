@@ -21,7 +21,7 @@
   </div>
 
   <!-- carousel -->
-  <div class="row mb-8">
+  <div class="row py-4">
     <div id="bookCarousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         {% for book_index_group in book_indices|batch(3) %}
@@ -58,7 +58,12 @@
       </button>
     </div>
   </div>
-  <h2 class="my-4">Recent Additions</h2>
+  <div class="my-4 row justify-content-between">
+    <h2 class="w-25">Recent Additions</h2>
+    <a href="{{ url_for('books.list_books') }}" class="w-25 btn btn-primary"
+      >View All</a
+    >
+  </div>
   <div class="row">
     {% from 'components/book_card.html' import book_card %} {% for book in books
     %}
