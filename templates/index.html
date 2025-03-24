@@ -58,8 +58,8 @@
       </button>
     </div>
   </div>
+  <h2 class="my-4">Recent Additions</h2>
   <div class="row">
-    <h4 class="mb-4">Recent Additions</h4>
     {% from 'components/book_card.html' import book_card %} {% for book in books
     %}
     <div class="col-md-4 mb-4">{{ book_card(book) }}</div>

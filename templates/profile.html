@@ -1,10 +1,12 @@
 {% extends "components/layout.html" %} {% block content %}
 <div class="container">
-  <h1 class="text-center my-4">Profile</h1>
-
+  <h1 class="text-center">Profile</h1>
   <div class="row justify-content-center">
     <div class="col-md-6">
       <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Profile</h5>
+        </div>
         <div class="card-body">
           {% with messages = get_flashed_messages(with_categories=true) %} {% if
           messages %} {% for category, message in messages %}
@@ -47,25 +49,6 @@
               Update Profile
             </button>
           </form>
-        </div>
-      </div>
-
-      <div class="card mt-4">
-        <div class="card-header">
-          <h5 class="card-title mb-0">Order History</h5>
-        </div>
-        <div class="card-body">
-          {% if orders %} {% for order in orders %}
-          <div class="border-bottom mb-3 pb-3">
-            <p class="mb-1">Order #{{ order.id }}</p>
-            <p class="mb-1">
-              Date: {{ order.created_at.strftime('%Y-%m-%d') }}
-            </p>
-            <p class="mb-1">Total: ${{ "%.2f"|format(order.total) }}</p>
-          </div>
-          {% endfor %} {% else %}
-          <p class="text-muted">No orders yet</p>
-          {% endif %}
         </div>
       </div>
     </div>
