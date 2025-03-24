@@ -57,18 +57,26 @@ def create_sample_data():
         role="driver",
     )
 
-    db.session.add(admin_user)
-    db.session.add(customer_user)
-    db.session.add(driver_user)
+    db.session.add_all([admin_user, customer_user, driver_user])
     db.session.commit()
 
+    # Create role-specific users with required fields
     admin = Admin(user_id=admin_user.id)
-    customer = Customer(user_id=customer_user.id)
-    driver = Driver(user_id=driver_user.id, license_number="DRIVER123")
+    customer = Customer(
+        user_id=customer_user.id,
+        phone="1234567890",
+        address="123 Customer St",
+        student_id="STU123"
+    )
+    driver = Driver(
+        user_id=driver_user.id,
+        license_number="DRIVER123",
+        phone="0987654321",
+        vehicle_info="Toyota Corolla 2020",
+        license_image="driver_license.jpg"
+    )
 
-    db.session.add(admin)
-    db.session.add(customer)
-    db.session.add(driver)
+    db.session.add_all([admin, customer, driver])
     db.session.commit()
 
     # Create sample books
