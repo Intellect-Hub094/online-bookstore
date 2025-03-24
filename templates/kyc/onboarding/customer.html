@@ -5,85 +5,39 @@
       <div class="card shadow">
         <div class="card-body p-5">
           <h2 class="text-center mb-4">Customer Registration</h2>
-          <form action="/kyc/onboarding/customer" method="POST">
+          <form method="POST" action="{{ url_for('kyc.customer_onboarding') }}">
+            {{ form.hidden_tag() }}
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="firstName" class="form-label">First Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="firstName"
-                  name="firstName"
-                  required
-                />
+                {{ form.first_name.label(class="form-label") }}
+                {{ form.first_name(class="form-control") }}
               </div>
               <div class="col-md-6 mb-3">
-                <label for="lastName" class="form-label">Last Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="lastName"
-                  name="lastName"
-                  required
-                />
+                {{ form.last_name.label(class="form-label") }}
+                {{ form.last_name(class="form-control") }}
               </div>
             </div>
             <div class="mb-3">
-              <label for="email" class="form-label">Email address</label>
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                name="email"
-                required
-              />
+              {{ form.email.label(class="form-label") }}
+              {{ form.email(class="form-control") }}
             </div>
             <div class="mb-3">
-              <label for="phone" class="form-label">Phone Number</label>
-              <input
-                type="tel"
-                class="form-control"
-                id="phone"
-                name="phone"
-                required
-              />
+              {{ form.phone.label(class="form-label") }}
+              {{ form.phone(class="form-control") }}
             </div>
             <div class="mb-3">
-              <label for="address" class="form-label">Delivery Address</label>
-              <textarea
-                class="form-control"
-                id="address"
-                name="address"
-                rows="3"
-                required
-              ></textarea>
+              {{ form.address.label(class="form-label") }}
+              {{ form.address(class="form-control") }}
             </div>
             <div class="mb-3">
-              <label for="studentId" class="form-label"
-                >Student ID (if applicable)</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="studentId"
-                name="studentId"
-              />
+              {{ form.student_id.label(class="form-label") }}
+              {{ form.student_id(class="form-control") }}
             </div>
             <div class="mb-3 form-check">
-              <input
-                type="checkbox"
-                class="form-check-input"
-                id="terms"
-                required
-              />
-              <label class="form-check-label" for="terms">
-                I agree to the
-                <a href="/kyc/terms-and-conditions">Terms and Conditions</a>
-              </label>
+              {{ form.terms(class="form-check-input") }}
+              {{ form.terms.label(class="form-check-label") }}
             </div>
-            <button type="submit" class="btn btn-primary w-100">
-              Complete Registration
-            </button>
+            {{ form.submit(class="btn btn-primary w-100") }}
           </form>
         </div>
       </div>
