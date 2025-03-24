@@ -8,19 +8,26 @@ from utils import _clear_flashes
 
 auth_bp = Blueprint("auth", __name__)
 
+
+def _redirect_based_on_role():
+    if current_user.role == "admin":
+        return redirect(url_for("admin.index"))
+    if current_user.role == "driver":
+        return redirect(url_for("orders"))
+    if current_user.role == "customer":
+        return redirect(url_for("books.list_books"))
+    return redirect(url_for("index"))
+
+
 def role_based_redirect(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if current_user.is_authenticated:
-            if current_user.role == "admin":
-                return redirect(url_for("admin.index"))
-            if current_user.role == "driver":
-                return redirect(url_for("orders"))
-            if current_user.role == "customer":
-                return redirect(url_for("books"))
-            return redirect(url_for("index"))
+            return _redirect_based_on_role()
         return f(*args, **kwargs)
+
     return decorated_function
+
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 @role_based_redirect
@@ -31,8 +38,7 @@ def login():
         if user and check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
             _clear_flashes()
-            next_page = request.args.get("next")
-            return redirect(next_page or url_for("index"))
+            _redirect_based_on_role()
         flash("Invalid email or password")
     else:
         for field, errors in form.errors.items():

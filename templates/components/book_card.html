@@ -4,7 +4,7 @@
     <div class="card-body">
         <h5 class="card-title fw-bold">{{ book.title }}</h5>
         <p class="card-text">{{ book.author }}</p>
-        <p class="card-text"><small class="text-muted">${{ "%.2f"|format(book.price) }}</small></p>
+        <p class="card-text"><small class="text-muted">R{{ "%.2f"|format(book.price) }}</small></p>
         <a href="/books/{{ book.id }}" class="btn btn-primary">View Details</a>
     </div>
 </div>

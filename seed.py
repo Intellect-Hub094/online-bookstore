@@ -74,7 +74,7 @@ def create_sample_data():
         title="C# 13 and .NET 9: Modern Cross-Platform Development Fundamentals",
         author="Mark J. Price",
         isbn="ISBN003",
-        price=29.99,
+        price=2900.99,
         stock=75,
         description="Start building websites and services with ASP.NET Core 9, Blazor, and EF Core 9. Ninth Edition.",
         category="Textbooks",
@@ -86,7 +86,7 @@ def create_sample_data():
         title="Django 5 By Example",
         author="Antonio Melé",
         isbn="ISBN004",
-        price=34.99,
+        price=3400.99,
         stock=60,
         description="Build powerful and reliable Python web applications from scratch. Fifth Edition.",
         category="Textbooks",
@@ -98,7 +98,7 @@ def create_sample_data():
         title="Architecting ASP.NET Core Applications",
         author="Carl-Hugo Marcotte",
         isbn="ISBN005",
-        price=39.99,
+        price=3900.99,
         stock=45,
         description="An atypical design patterns guide for .NET 8, C#12, and beyond. Third Edition.",
         category="Textbooks",
@@ -110,7 +110,7 @@ def create_sample_data():
         title="Real-World Web Development with .NET 9",
         author="Mark J. Price",
         isbn="ISBN006",
-        price=27.99,
+        price=2700.99,
         stock=80,
         description="Build websites and services using mature and proven ASP.NET Core MVC, Web API, and Umbraco CMS.",
         category="Textbooks",
@@ -122,7 +122,7 @@ def create_sample_data():
         title="The Complete Edition - Software Engineering for Real-Time Systems",
         author="Jim Cooling",
         isbn="ISBN007",
-        price=49.99,
+        price=4900.99,
         stock=30,
         description="A software engineering perspective toward designing real-time systems.",
         category="Textbooks",
@@ -134,7 +134,7 @@ def create_sample_data():
         title="Solutions Architect's Handbook",
         author="Saurabh Shrivastava, Neelanjali Srivastav",
         isbn="ISBN009",
-        price=44.99,
+        price=4400.99,
         stock=55,
         description="Kick-start your career with architecture design principles, strategies, and generative AI techniques. Third Edition.",
         category="Textbooks",
@@ -146,7 +146,7 @@ def create_sample_data():
         title="50 Algorithms Every Programmer Should Know",
         author="Imran Ahmad, PhD",
         isbn="ISBN011",
-        price=32.99,
+        price=3200.99,
         stock=70,
         description="Tackle computer science challenges with classic to modern algorithms in machine learning, software design, data systems, and cryptography. Second Edition.",
         category="Textbooks",
@@ -158,7 +158,7 @@ def create_sample_data():
         title="Security-Driven Software Development",
         author="Aspen Olmsted",
         isbn="ISBN012",
-        price=22.99,
+        price=2200.99,
         stock=40,
         description="Learn to analyze and mitigate risks in your software projects.",
         category="Textbooks",
@@ -170,7 +170,7 @@ def create_sample_data():
         title="Java Concurrency and Parallelism",
         author="Jay Wang",
         isbn="ISBN013",
-        price=35.99,
+        price=3500.99,
         stock=50,
         description="Master advanced Java techniques for cloud-based applications through concurrency and parallelism.",
         category="Textbooks",
@@ -206,8 +206,8 @@ def create_sample_data():
     db.session.add(order)
     db.session.commit()
 
-    purchase1 = Purchase(order_id=order.id, book_id=book1.id, quantity=2, price=10.99)
-    purchase2 = Purchase(order_id=order.id, book_id=book2.id, quantity=1, price=15.99)
+    purchase1 = Purchase(order_id=order.id, book_id=book1.id, quantity=2, price=1000.99)
+    purchase2 = Purchase(order_id=order.id, book_id=book2.id, quantity=1, price=1500.99)
 
     db.session.add(purchase1)
     db.session.add(purchase2)

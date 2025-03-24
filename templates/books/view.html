@@ -12,7 +12,7 @@
       <h1>{{ book.title }}</h1>
       <p class="lead">by {{ book.author }}</p>
       <p><strong>ISBN:</strong> {{ book.isbn }}</p>
-      <p><strong>Price:</strong> ${{ "%.2f"|format(book.price) }}</p>
+      <p><strong>Price:</strong> R{{ "%.2f"|format(book.price) }}</p>
       <p><strong>Stock:</strong> {{ book.stock }}</p>
       <p>{{ book.description }}</p>
 
