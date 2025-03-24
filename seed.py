@@ -1,4 +1,7 @@
+import sys
+from datetime import datetime
 from werkzeug.security import generate_password_hash
+
 from models import (
     db,
     User,
@@ -12,7 +15,7 @@ from models import (
     Driver,
     Transaction,
 )
-from datetime import datetime
+
 from app import app
 
 
@@ -199,9 +202,11 @@ def create_sample_data():
     # Create sample orders and purchases
     order = Order(
         customer_id=customer.id,
+        user_id=customer_user.id,  # New field
         order_date=datetime.now(),
         total_amount=36.97,
         status="pending",
+        cancellation_reason=None,  # New field
     )
     db.session.add(order)
     db.session.commit()
@@ -236,4 +241,5 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
         clear_data()
-        create_sample_data()
+        if not ("--skip-seed" in sys.argv):
+            create_sample_data()

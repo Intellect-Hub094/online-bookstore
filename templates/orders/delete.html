@@ -10,9 +10,10 @@
           <h2 class="mb-4">Cancel Order</h2>
           <p class="mb-4">
             Are you sure you want to cancel order
-            "<strong>#ORD-2025-001</strong>"? This action cannot be undone.
+            "<strong>#ORD-{{ order.id }}</strong>"? This action cannot be undone.
           </p>
-          <form action="/orders/c/delete/1" method="POST">
+          <form action="{{ url_for('orders.cancel_order', order_id=order.id) }}" method="POST">
+            <input type="hidden" name="order_id" value="{{ order.id }}">
             <div class="mb-3">
               <label for="reason" class="form-label">Cancellation Reason</label>
               <textarea
@@ -27,7 +28,7 @@
               <button type="submit" class="btn btn-danger">
                 Yes, Cancel Order
               </button>
-              <a href="/orders/c/view/1" class="btn btn-outline-secondary"
+              <a href="{{ url_for('orders.view_order', order_id=order.id) }}" class="btn btn-outline-secondary"
                 >No, Keep Order</a
               >
             </div>

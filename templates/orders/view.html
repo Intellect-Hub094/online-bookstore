@@ -12,6 +12,9 @@
             <p><strong>Date:</strong> {{ order.order_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
             <p><strong>Status:</strong> {{ order.status }}</p>
             <p><strong>Total Amount:</strong> ${{ "%.2f"|format(order.total_amount) }}</p>
+            {% if order.status == 'cancelled' %}
+            <p><strong>Cancellation Reason:</strong> {{ order.cancellation_reason }}</p>
+            {% endif %}
         </div>
     </div>
     
