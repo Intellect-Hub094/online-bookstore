@@ -1,9 +1,6 @@
-{% extends "components/layout.html" %} 
-{% block content %}
+{% extends "components/layout.html" %} {% block content %}
 <div class="container">
   <div class="row my-4">
-    <!-- Profile Info Column -->
-    <div class="col-md-6">
       <div class="card mb-4">
         <div class="card-header">
           <h5 class="card-title mb-0">Profile Information</h5>
@@ -37,6 +34,58 @@
               <div class="text-danger">{{ form.last_name.errors[0] }}</div>
               {% endif %}
             </div>
+
+            {% if current_user.role == 'customer' %}
+            <div class="mb-3">
+              <label class="form-label">Phone Number</label>
+              {{ form.phone(class="form-control") }} {% if form.phone.errors %}
+              <div class="text-danger">{{ form.phone.errors[0] }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Delivery Address</label>
+              {{ form.address(class="form-control") }} {% if form.address.errors
+              %}
+              <div class="text-danger">{{ form.address.errors[0] }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Student ID</label>
+              {{ form.student_id(class="form-control") }} {% if
+              form.student_id.errors %}
+              <div class="text-danger">{{ form.student_id.errors[0] }}</div>
+              {% endif %}
+            </div>
+            {% endif %} {% if current_user.role == 'driver' %}
+            <div class="mb-3">
+              <label class="form-label">Phone Number</label>
+              {{ form.phone(class="form-control") }} {% if form.phone.errors %}
+              <div class="text-danger">{{ form.phone.errors[0] }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Driver's License Number</label>
+              {{ form.license_number(class="form-control") }} {% if
+              form.license_number.errors %}
+              <div class="text-danger">{{ form.license_number.errors[0] }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Vehicle Information</label>
+              {{ form.vehicle_info(class="form-control") }} {% if
+              form.vehicle_info.errors %}
+              <div class="text-danger">{{ form.vehicle_info.errors[0] }}</div>
+              {% endif %}
+            </div>
+            <div class="mb-3">
+              <label class="form-label">License Image</label>
+              {{ form.license_image(class="form-control") }} {% if
+              form.license_image.errors %}
+              <div class="text-danger">{{ form.license_image.errors[0] }}</div>
+              {% endif %}
+            </div>
+            {% endif %}
+
             <div class="mb-3">
               <label class="form-label"
                 >New Password (leave blank to keep current)</label
@@ -52,52 +101,6 @@
           </form>
         </div>
       </div>
-    </div>
-
-    <!-- Purchase History Column -->
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="card-title mb-0">Purchase History</h5>
-        </div>
-        <div class="card-body">
-          {% if orders %}
-            {% for order in orders %}
-              <div class="mb-3 border-bottom pb-3">
-                <h6>Order #{{ order.id }} - {{ order.order_date.strftime('%Y-%m-%d') }}</h6>
-                <div class="small text-muted mb-2">Status: {{ order.status }}</div>
-                <div class="table-responsive">
-                  <table class="table table-sm">
-                    <thead>
-                      <tr>
-                        <th>Book</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for item in order.order_items %}
-                        <tr>
-                          <td>{{ item.book.title }}</td>
-                          <td>{{ item.quantity }}</td>
-                          <td>R{{ "%.2f"|format(item.price) }}</td>
-                        </tr>
-                      {% endfor %}
-                      <tr>
-                        <td colspan="2" class="text-end"><strong>Total:</strong></td>
-                        <td><strong>R{{ "%.2f"|format(order.total_amount) }}</strong></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            {% endfor %}
-          {% else %}
-            <p class="text-muted">No purchase history available.</p>
-          {% endif %}
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 {% endblock %}
