@@ -13,12 +13,12 @@
               >Introduction to Computer Science</strong
             >"? This action cannot be undone.
           </p>
-          <form action="/books/a/delete/1" method="POST">
+          <form action="{{ url_for('books.admin_delete_book', book_id=1) }}" method="POST">
             <div class="d-grid gap-2">
               <button type="submit" class="btn btn-danger">
                 Yes, Delete Book
               </button>
-              <a href="/books/a/view/1" class="btn btn-outline-secondary"
+              <a href="{{ url_for('books.view_book', book_id=1) }}" class="btn btn-outline-secondary"
                 >Cancel</a
               >
             </div>
