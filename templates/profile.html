@@ -1,11 +1,12 @@
-{% extends "components/layout.html" %} {% block content %}
+{% extends "components/layout.html" %} 
+{% block content %}
 <div class="container">
-  <h1 class="text-center">Profile</h1>
-  <div class="row justify-content-center">
+  <div class="row my-4">
+    <!-- Profile Info Column -->
     <div class="col-md-6">
-      <div class="card">
+      <div class="card mb-4">
         <div class="card-header">
-          <h5 class="card-title mb-0">Profile</h5>
+          <h5 class="card-title mb-0">Profile Information</h5>
         </div>
         <div class="card-body">
           {% with messages = get_flashed_messages(with_categories=true) %} {% if
@@ -49,6 +50,51 @@
               Update Profile
             </button>
           </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Purchase History Column -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Purchase History</h5>
+        </div>
+        <div class="card-body">
+          {% if orders %}
+            {% for order in orders %}
+              <div class="mb-3 border-bottom pb-3">
+                <h6>Order #{{ order.id }} - {{ order.order_date.strftime('%Y-%m-%d') }}</h6>
+                <div class="small text-muted mb-2">Status: {{ order.status }}</div>
+                <div class="table-responsive">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th>Book</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for item in order.order_items %}
+                        <tr>
+                          <td>{{ item.book.title }}</td>
+                          <td>{{ item.quantity }}</td>
+                          <td>R{{ "%.2f"|format(item.price) }}</td>
+                        </tr>
+                      {% endfor %}
+                      <tr>
+                        <td colspan="2" class="text-end"><strong>Total:</strong></td>
+                        <td><strong>R{{ "%.2f"|format(order.total_amount) }}</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-muted">No purchase history available.</p>
+          {% endif %}
         </div>
       </div>
     </div>
