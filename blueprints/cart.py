@@ -5,6 +5,7 @@ from forms.cart import EditCartItemForm
 
 cart_bp = Blueprint("cart", __name__)
 
+
 @cart_bp.route("/")
 @login_required
 def view_cart():
@@ -12,6 +13,7 @@ def view_cart():
     cart_items = Cart.query.filter_by(customer_id=customer.id).all()
     total = sum(item.book.price * item.quantity for item in cart_items)
     return render_template("cart/view.html", cart_items=cart_items, total=total)
+
 
 @cart_bp.route("/add/<int:book_id>")
 @login_required
@@ -30,6 +32,7 @@ def add_to_cart(book_id):
     flash("Book added to cart!", "success")
     return redirect(url_for("books.view_book", book_id=book_id))
 
+
 @cart_bp.route("/delete/<int:book_id>")
 @login_required
 def delete_from_cart(book_id):
@@ -42,11 +45,14 @@ def delete_from_cart(book_id):
     flash("Item deleted from cart!", "success")
     return redirect(url_for("cart.view_cart"))
 
+
 @cart_bp.route("/edit/<int:book_id>", methods=["GET", "POST"])
 @login_required
 def edit_cart_item(book_id):
     customer = Customer.query.filter_by(user_id=current_user.id).first()
-    cart_item = Cart.query.filter_by(customer_id=customer.id, book_id=book_id).first_or_404()
+    cart_item = Cart.query.filter_by(
+        customer_id=customer.id, book_id=book_id
+    ).first_or_404()
     form = EditCartItemForm()
 
     if form.validate_on_submit():
