@@ -15,6 +15,11 @@
                             <div class="col-md-6 mb-3">
                                 {{ form.title.label(class="form-label") }}
                                 {{ form.title(class="form-control") }}
+                                {% if form.title.errors %}
+                                    {% for error in form.title.errors %}
+                                        <div class="text-danger">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
                                 {{ form.author.label(class="form-label") }}
@@ -35,10 +40,26 @@
                             <div class="col-md-6 mb-3">
                                 {{ form.category.label(class="form-label") }}
                                 {{ form.category(class="form-control") }}
+                                {% if form.category.errors %}
+                                    {% for error in form.category.errors %}
+                                        <div class="text-danger">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
                                 {{ form.faculty.label(class="form-label") }}
                                 {{ form.faculty(class="form-control") }}
+                                {% if form.faculty.errors %}
+                                    {% for error in form.faculty.errors %}
+                                        <div class="text-danger">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.publication_date.label(class="form-label") }}
+                                {{ form.publication_date(class="form-control") }}
                             </div>
                         </div>
                         <div class="mb-3">
@@ -52,6 +73,11 @@
                         <div class="mb-4">
                             {{ form.cover_image.label(class="form-label") }}
                             {{ form.cover_image(class="form-control") }}
+                            {% if form.cover_image.errors %}
+                                {% for error in form.cover_image.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary btn-lg">Create Book</button>

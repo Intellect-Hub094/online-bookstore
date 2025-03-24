@@ -1,6 +1,14 @@
 from datetime import datetime
 import os
-from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
+from flask import (
+    Blueprint,
+    render_template,
+    redirect,
+    url_for,
+    flash,
+    request,
+    current_app,
+)
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from models import Book, db, Wishlist
@@ -43,9 +51,13 @@ def view_book(book_id):
     book = Book.query.get_or_404(book_id)
     wishlist_book_ids = []
     if current_user.is_authenticated:
-        wishlist_items = Wishlist.query.filter_by(customer_id=current_user.customer.id).all()
+        wishlist_items = Wishlist.query.filter_by(
+            customer_id=current_user.customer.id
+        ).all()
         wishlist_book_ids = [item.book_id for item in wishlist_items]
-    return render_template("books/view.html", book=book, wishlist_book_ids=wishlist_book_ids)
+    return render_template(
+        "books/view.html", book=book, wishlist_book_ids=wishlist_book_ids
+    )
 
 
 @books_bp.route("/create", methods=["GET", "POST"])
@@ -60,110 +72,22 @@ def create_book():
             price=form.price.data,
             stock=form.stock.data,
             description=form.description.data,
+            category=form.category.data,
+            faculty=form.faculty.data,
+            publication_date=form.publication_date.data,
+            created_at=datetime.now(),
         )
         db.session.add(book)
         db.session.commit()
 
         if form.cover_image.data:
-            filename = f"{book.id}.jpg"
-            form.cover_image.data.save(os.path.join("static/uploads", filename))
+            filename = secure_filename(f"{book.id}.jpg")
+            form.cover_image.data.save(
+                os.path.join(current_app.config["BOOKS_UPLOAD_FOLDER"], filename)
+            )
             book.cover_image = filename
             db.session.commit()
 
         flash("Book created successfully!", "success")
         return redirect(url_for("books.list_books"))
     return render_template("books/create.html", form=form)
-
-
-def admin_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not current_user.is_authenticated or current_user.role != "admin":
-            flash("Access denied.", "danger")
-            return redirect(url_for("main.index"))
-        return f(*args, **kwargs)
-    return decorated_function
-
-@books_bp.route("/a/create/new", methods=["GET", "POST"])
-@login_required
-@admin_required
-def admin_create_book():
-    form = BookForm()
-    if request.method == "POST":
-        book = Book(
-            title=form.title.data,
-            author=form.author.data,
-            isbn=form.isbn.data,
-            price=float(form.price.data),
-            stock=int(form.stock.data),
-            description=form.description.data,
-            category=form.category.data,
-            faculty=form.faculty.data,
-            created_at=datetime.now()
-        )
-        db.session.add(book)
-        db.session.commit()
-
-        cover_image = request.files.get("cover")
-        if cover_image:
-            filename = f"{book.id}.jpg"
-            cover_image.save(os.path.join(current_app.config["UPLOAD_FOLDER"], filename))
-            book.cover_image = filename
-            db.session.commit()
-
-        flash("Book created successfully!", "success")
-        return redirect(url_for("books.admin_list_books"))
-    return render_template("books/create.html", form=form)
-
-@books_bp.route("/a/list")
-@login_required
-@admin_required
-def admin_list_books():
-    books = Book.query.order_by(Book.created_at.desc()).all()
-    return render_template("books/admin_list.html", books=books)
-
-@books_bp.route("/a/edit/<int:book_id>", methods=["GET", "POST"])
-@login_required
-@admin_required
-def admin_edit_book(book_id):
-    book = Book.query.get_or_404(book_id)
-    if request.method == "POST":
-        book.title = request.form["title"]
-        book.author = request.form["author"]
-        book.isbn = request.form["isbn"]
-        book.price = float(request.form["price"])
-        book.stock = int(request.form["stock"])
-        book.description = request.form["description"]
-        book.category = request.form["category"]
-        book.faculty = request.form["faculty"]
-
-        cover_image = request.files.get("cover")
-        if cover_image:
-            if book.cover_image:
-                old_image_path = os.path.join(current_app.config["UPLOAD_FOLDER"], book.cover_image)
-                if os.path.exists(old_image_path):
-                    os.remove(old_image_path)
-            
-            filename = secure_filename(cover_image.filename)
-            cover_image.save(os.path.join(current_app.config["UPLOAD_FOLDER"], filename))
-            book.cover_image = filename
-
-        db.session.commit()
-        flash("Book updated successfully!", "success")
-        return redirect(url_for("books.admin_list_books"))
-    return render_template("books/edit.html", book=book)
-
-@books_bp.route("/a/delete/<int:book_id>")
-@login_required
-@admin_required
-def admin_delete_book(book_id):
-    book = Book.query.get_or_404(book_id)
-    if book.cover_image:
-        image_path = os.path.join(current_app.config["UPLOAD_FOLDER"], book.cover_image)
-        if os.path.exists(image_path):
-            os.remove(image_path)
-    
-    db.session.delete(book)
-    db.session.commit()
-    flash("Book deleted successfully!", "success")
-    return redirect(url_for("books.admin_list_books"))

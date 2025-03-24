@@ -7,6 +7,7 @@ from wtforms import (
     TextAreaField,
     FileField,
     SelectField,
+    DateField,
 )
 from wtforms.validators import DataRequired, Length, NumberRange
 
@@ -20,24 +21,30 @@ class BookForm(FlaskForm):
     description = TextAreaField("Description", validators=[DataRequired()])
     cover_image = FileField(
         "Cover Image",
-        validators=[FileRequired(), FileAllowed(["jpg", "jpeg"], "Images only!")],
+        validators=[
+            FileRequired(message="Please upload a cover image"),
+            FileAllowed(["jpg"], ".jpg Images only!"),
+        ],
     )
     category = SelectField(
         "Category",
         choices=[
+            ("", "Select a category"),
             ("Textbooks", "Textbooks"),
             ("Research Papers", "Research Papers"),
             ("Journals", "Journals"),
         ],
-        validators=[DataRequired()],
+        validators=[DataRequired(message="Please select a category")],
     )
     faculty = SelectField(
         "Faculty",
         choices=[
+            ("", "Select a faculty"),
             ("Engineering", "Engineering"),
             ("Science", "Science"),
             ("Arts", "Arts"),
             ("Commerce", "Commerce"),
         ],
-        validators=[DataRequired()],
+        validators=[DataRequired(message="Please select a faculty")],
     )
+    publication_date = DateField("Publication Date", format='%Y-%m-%d', validators=[DataRequired()])

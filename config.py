@@ -33,4 +33,5 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Folder to store uploaded images
-    UPLOAD_FOLDER = "static/uploads"
+    BOOKS_UPLOAD_FOLDER = "static/uploads/books"
+    DRIVER_LICENSE_UPLOAD_FOLDER = "static/uploads/driver_license"
