@@ -20,9 +20,9 @@
                 {% for item in cart_items %}
                 <tr>
                     <td>{{ item.book.title }}</td>
-                    <td>${{ "%.2f"|format(item.book.price) }}</td>
+                    <td>R{{ "%.2f"|format(item.book.price) }}</td>
                     <td>{{ item.quantity }}</td>
-                    <td>${{ "%.2f"|format(item.book.price * item.quantity) }}</td>
+                    <td>R{{ "%.2f"|format(item.book.price * item.quantity) }}</td>
                     <td>
                         <a href="{{ url_for('cart.edit_cart_item', book_id=item.book_id) }}" class="btn btn-primary btn-sm">Edit</a>
                         <a href="{{ url_for('cart.delete_from_cart', book_id=item.book_id) }}" class="btn btn-danger btn-sm">Remove</a>
@@ -33,7 +33,7 @@
             <tfoot>
                 <tr>
                     <td colspan="3" class="text-right"><strong>Total:</strong></td>
-                    <td>${{ "%.2f"|format(total) }}</td>
+                    <td>R{{ "%.2f"|format(total) }}</td>
                     <td></td>
                 </tr>
             </tfoot>
