@@ -2,6 +2,12 @@
 
 {% block content %}
 <div class="container mt-4">
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
+    <div class="alert alert-{{ category }}" role="alert">
+      <p>{{ message }}</p>
+    </div>
+    {% endfor %} {% endif %} {% endwith %}
     <!-- Search and Filter -->
     <div class="card mb-4">
         <div class="card-body">

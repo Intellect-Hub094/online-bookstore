@@ -13,7 +13,6 @@ from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from models import Book, db, Wishlist
 from forms.books import BookForm
-from functools import wraps
 
 books_bp = Blueprint("books", __name__)
 
@@ -63,12 +62,16 @@ def view_book(book_id):
 @books_bp.route("/create", methods=["GET", "POST"])
 @login_required
 def create_book():
+    if not current_user.role == "admin":
+        flash("Access denied. Admin privileges required.", "danger")
+        return redirect(url_for("main.index"))
+
     form = BookForm()
     if form.validate_on_submit():
         book = Book(
             title=form.title.data,
             author=form.author.data,
-            isbn=form.isbn.data,
+            isbn=form.isbn.data.strip(),
             price=form.price.data,
             stock=form.stock.data,
             description=form.description.data,
@@ -76,7 +79,51 @@ def create_book():
             faculty=form.faculty.data,
             created_at=datetime.now(),
         )
+
+        # Check for duplicate ISBN
+        if Book.query.filter_by(isbn=book.isbn).first():
+            flash("A book with this ISBN already exists.", "danger")
+            return render_template("books/create.html", form=form)
+
+        book.id = Book.query.count() + 1
+
         db.session.add(book)
+
+        if form.cover_image.data:
+            try:
+                filename = secure_filename(f"{book.id}.jpg")
+                filepath = os.path.join(
+                    current_app.config["BOOKS_UPLOAD_FOLDER"], filename
+                )
+                form.cover_image.data.save(filepath)
+                book.cover_image = filename
+                db.session.commit()
+            except Exception as e:
+                current_app.logger.error(f"Error saving cover image: {str(e)}")
+                flash("Book created but cover image could not be saved.", "error")
+                return redirect(url_for("books.create_book"))
+
+        flash("Book created successfully!", "success")
+        return redirect(url_for("books.list_books"))
+
+    return render_template("books/create.html", form=form)
+
+
+@books_bp.route("/admin/edit/<int:book_id>", methods=["GET", "POST"])
+@login_required
+def admin_edit_book(book_id):
+    book = Book.query.get_or_404(book_id)
+    form = BookForm(obj=book)
+    if form.validate_on_submit():
+        book.title = form.title.data
+        book.author = form.author.data
+        book.isbn = form.isbn.data
+        book.price = form.price.data
+        book.stock = form.stock.data
+        book.description = form.description.data
+        book.category = form.category.data
+        book.faculty = form.faculty.data
+        book.updated_at = datetime.now()
         db.session.commit()
 
         if form.cover_image.data:
@@ -87,6 +134,16 @@ def create_book():
             book.cover_image = filename
             db.session.commit()
 
-        flash("Book created successfully!", "success")
+        flash("Book updated successfully!", "success")
         return redirect(url_for("books.list_books"))
-    return render_template("books/create.html", form=form)
+    return render_template("books/edit.html", form=form, book=book)
+
+
+@books_bp.route("/admin/delete/<int:book_id>", methods=["GET", "DELETE"])
+@login_required
+def admin_delete_book(book_id):
+    book = Book.query.get_or_404(book_id)
+    db.session.delete(book)
+    db.session.commit()
+    flash("Book deleted successfully!", "success")
+    return redirect(url_for("books.list_books"))

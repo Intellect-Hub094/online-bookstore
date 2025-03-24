@@ -1,85 +1,47 @@
 {% extends "components/layout.html" %}
-
 {% block content %}
 <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">Create a New Book</h3>
-                </div>
-                <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data">
-                        {{ form.hidden_tag() }}
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                {{ form.title.label(class="form-label") }}
-                                {{ form.title(class="form-control") }}
-                                {% if form.title.errors %}
-                                    {% for error in form.title.errors %}
-                                        <div class="text-danger">{{ error }}</div>
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                {{ form.author.label(class="form-label") }}
-                                {{ form.author(class="form-control") }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                {{ form.isbn.label(class="form-label") }}
-                                {{ form.isbn(class="form-control") }}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                {{ form.price.label(class="form-label") }}
-                                {{ form.price(class="form-control") }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                {{ form.category.label(class="form-label") }}
-                                {{ form.category(class="form-control") }}
-                                {% if form.category.errors %}
-                                    {% for error in form.category.errors %}
-                                        <div class="text-danger">{{ error }}</div>
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                {{ form.faculty.label(class="form-label") }}
-                                {{ form.faculty(class="form-control") }}
-                                {% if form.faculty.errors %}
-                                    {% for error in form.faculty.errors %}
-                                        <div class="text-danger">{{ error }}</div>
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            {{ form.stock.label(class="form-label") }}
-                            {{ form.stock(class="form-control") }}
-                        </div>
-                        <div class="mb-3">
-                            {{ form.description.label(class="form-label") }}
-                            {{ form.description(class="form-control", rows="4") }}
-                        </div>
-                        <div class="mb-4">
-                            {{ form.cover_image.label(class="form-label") }}
-                            {{ form.cover_image(class="form-control") }}
-                            {% if form.cover_image.errors %}
-                                {% for error in form.cover_image.errors %}
-                                    <div class="text-danger">{{ error }}</div>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg">Create Book</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header text-white">
+          <h3 class="mb-0">Create a New Book</h3>
+        </div>
+        <div class="card-body">
+          <form method="POST" enctype="multipart/form-data" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="row">
+              {% for field in [form.title, form.author, form.isbn, form.price, form.stock, form.description, form.category, form.faculty, form.cover_image] %}
+                <div class="col-md-6 mb-3">
+                  {{ field.label(class="form-label") }}
+                  {{ field(class="form-control" + (" is-invalid" if field.errors else "")) }}
+                  {% if field.errors %}
+                    {% for error in field.errors %}
+                      <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary btn-lg">Create Book</button>
+              <a href="{{ url_for('books.list_books') }}" class="btn btn-outline-primary">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}
