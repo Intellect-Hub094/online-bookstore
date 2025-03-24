@@ -1,13 +1,11 @@
 {% extends "components/layout.html" %} {% block content %}
 <main class="container my-4">
   {% with messages = get_flashed_messages(with_categories=true) %} {% if
-  messages %}
-  <div class="alert alert-warning" role="alert">
-    {% for category, message in messages %}
+  messages %} {% for category, message in messages %}
+  <div class="alert alert-{{ category }}" role="alert">
     <p>{{ message }}</p>
-    {% endfor %}
   </div>
-  {% endif %} {% endwith %}
+  {% endfor %} {% endif %} {% endwith %}
   <!-- search bar -->
   <div class="row mb-4">
     <div class="col-md-6 mx-auto">
