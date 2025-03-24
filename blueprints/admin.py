@@ -103,6 +103,56 @@ def view_user(user_id):
     return render_template("admin/users/view.html", user=user)
 
 
+@admin_bp.route("/users/edit/<int:user_id>", methods=["GET", "POST"])
+@login_required
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    role = user.role
+    
+    if role == 'customer':
+        form = CustomerOnboardingForm(obj=user.customer)
+    elif role == 'driver':
+        form = DriverOnboardingForm(obj=user.driver)
+    else:
+        form = LoginForm(obj=user)
+    
+    if form.validate_on_submit():
+        user.email = form.email.data if hasattr(form, 'email') else user.email
+        if hasattr(form, 'password') and form.password.data:
+            user.set_password(form.password.data)
+        
+        if role == 'customer':
+            user.customer.first_name = form.first_name.data
+            user.customer.last_name = form.last_name.data
+            user.customer.phone = form.phone.data
+            user.customer.address = form.address.data
+            user.customer.student_id = form.student_id.data
+            
+        elif role == 'driver':
+            user.driver.first_name = form.first_name.data
+            user.driver.last_name = form.last_name.data
+            user.driver.phone = form.phone.data
+            user.driver.license_number = form.license_number.data
+            user.driver.vehicle_info = form.vehicle_info.data
+            user.driver.license_image = form.license_image.data.filename
+        
+        db.session.commit()
+        flash(f"{role.capitalize()} updated successfully!", "success")
+        return redirect(url_for("admin.view_user", user_id=user.id))
+    
+    return render_template("admin/users/edit.html", form=form, role=role, user=user)
+
+
+@admin_bp.route("/users/delete/<int:user_id>", methods=["POST"])
+@login_required
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    flash("User deleted successfully!", "success")
+    return redirect(url_for("admin.list_users"))
+
+
 @admin_bp.route("/users/dashboard")
 @login_required
 def users_dashboard():

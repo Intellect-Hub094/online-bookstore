@@ -26,6 +26,8 @@
                 <td>{{ user.role }}</td>
                 <td>
                     <a href="{{ url_for('admin.view_user', user_id=user.id) }}" class="btn btn-sm btn-info">View</a>
+                    <a href="{{ url_for('admin.edit_user', user_id=user.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{{ url_for('admin.delete_user', user_id=user.id) }}" class="btn btn-sm btn-danger">Delete</a>
                 </td>
             </tr>
             {% endfor %}

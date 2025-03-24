@@ -58,8 +58,8 @@
   </div>
 
   <!-- Recent Registrations -->
-  <div class="row">
-    <div class="col-md-8">
+  <div class="row mb-4">
+    <div class="col-12">
       <div class="card">
         <div class="card-header">
           <h5>Recent Registrations</h5>
@@ -68,7 +68,9 @@
           <table class="table">
             <thead>
               <tr>
-                <th>User</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th></th>
                 <th>Role</th>
                 <th>Action</th>
               </tr>
@@ -77,15 +79,15 @@
               {% for user in recent_users %}
               <tr>
                 <td>{{ user.email }}</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
                 <td>
                   <span class="badge bg-{{ user.role }}">{{ user.role }}</span>
                 </td>
                 <td>
-                  <a
-                    href="{{ url_for('admin.view_user', user_id=user.id) }}"
-                    class="btn btn-sm btn-info"
-                    >View</a
-                  >
+                  <a href="{{ url_for('admin.view_user', user_id=user.id) }}" class="btn btn-sm btn-info">View</a>
+                  <a href="{{ url_for('admin.edit_user', user_id=user.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                  <a href="{{ url_for('admin.delete_user', user_id=user.id) }}" class="btn btn-sm btn-danger">Delete</a>
                 </td>
               </tr>
               {% endfor %}
@@ -94,20 +96,7 @@
         </div>
       </div>
     </div>
-
-    <div class="col-md-4">
-      <div class="card">
-        <div class="card-header">
-          <h5>User Distribution</h5>
-        </div>
-        <div class="card-body">
-          <!-- Placeholder for a pie chart showing user type distribution -->
-          <div id="userDistributionChart" style="height: 300px">
-            <!-- Add chart initialization code in a script block -->
-          </div>
-        </div>
-      </div>
-    </div>
+  </div>
   </div>
 </div>
 {% endblock %}
