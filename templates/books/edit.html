@@ -5,116 +5,61 @@
       <div class="card shadow">
         <div class="card-body p-5">
           <h2 class="text-center mb-4">Edit Book</h2>
-          <form
-            action="/books/a/edit/1"
-            method="POST"
-            enctype="multipart/form-data"
-          >
+          <form action="{{ url_for('books.admin_edit_book', book_id=book.id) }}" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
               <label for="title" class="form-label">Book Title</label>
-              <input
-                type="text"
-                class="form-control"
-                id="title"
-                name="title"
-                value="Introduction to Computer Science"
-                required
-              />
+              <input type="text" class="form-control" id="title" name="title" value="{{ book.title }}" required />
             </div>
             <div class="mb-3">
               <label for="author" class="form-label">Author</label>
-              <input
-                type="text"
-                class="form-control"
-                id="author"
-                name="author"
-                value="John Smith"
-                required
-              />
+              <input type="text" class="form-control" id="author" name="author" value="{{ book.author }}" required />
             </div>
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="isbn" class="form-label">ISBN</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="isbn"
-                  name="isbn"
-                  value="978-0-123456-78-9"
-                  required
-                />
+                <input type="text" class="form-control" id="isbn" name="isbn" value="{{ book.isbn }}" required />
               </div>
               <div class="col-md-6 mb-3">
                 <label for="price" class="form-label">Price</label>
                 <div class="input-group">
-                  <span class="input-group-text">$</span>
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="price"
-                    name="price"
-                    value="49.99"
-                    step="0.01"
-                    required
-                  />
+                  <span class="input-group-text">R</span>
+                  <input type="number" class="form-control" id="price" name="price" value="{{ book.price }}" step="0.01" required />
                 </div>
               </div>
             </div>
             <div class="mb-3">
               <label for="category" class="form-label">Category</label>
-              <select
-                class="form-select"
-                id="category"
-                name="category"
-                required
-              >
-                <option value="textbook" selected>Textbook</option>
-                <option value="research">Research Paper</option>
-                <option value="journal">Journal</option>
+              <select class="form-select" id="category" name="category" required>
+                <option value="Textbooks" {% if book.category == 'Textbooks' %}selected{% endif %}>Textbooks</option>
+                <option value="Research Papers" {% if book.category == 'Research Papers' %}selected{% endif %}>Research Papers</option>
+                <option value="Journals" {% if book.category == 'Journals' %}selected{% endif %}>Journals</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="faculty" class="form-label">Faculty</label>
+              <select class="form-select" id="faculty" name="faculty" required>
+                <option value="Engineering" {% if book.faculty == 'Engineering' %}selected{% endif %}>Engineering</option>
+                <option value="Science" {% if book.faculty == 'Science' %}selected{% endif %}>Science</option>
+                <option value="Arts" {% if book.faculty == 'Arts' %}selected{% endif %}>Arts</option>
+                <option value="Commerce" {% if book.faculty == 'Commerce' %}selected{% endif %}>Commerce</option>
               </select>
             </div>
             <div class="mb-3">
               <label for="description" class="form-label">Description</label>
-              <textarea
-                class="form-control"
-                id="description"
-                name="description"
-                rows="4"
-                required
-              >
-A comprehensive introduction to computer science, covering fundamental concepts, programming basics, and modern computing principles.</textarea
-              >
+              <textarea class="form-control" id="description" name="description" rows="4" required>{{ book.description }}</textarea>
             </div>
             <div class="mb-3">
               <label for="cover" class="form-label">Book Cover Image</label>
-              <input
-                type="file"
-                class="form-control"
-                id="cover"
-                name="cover"
-                accept="image/*"
-              />
-              <small class="text-muted"
-                >Leave empty to keep current image</small
-              >
+              <input type="file" class="form-control" id="cover" name="cover" accept="image/*" />
+              <small class="text-muted">Leave empty to keep current image</small>
             </div>
             <div class="mb-3">
               <label for="stock" class="form-label">Stock Quantity</label>
-              <input
-                type="number"
-                class="form-control"
-                id="stock"
-                name="stock"
-                value="5"
-                min="0"
-                required
-              />
+              <input type="number" class="form-control" id="stock" name="stock" value="{{ book.stock }}" min="0" required />
             </div>
             <div class="d-grid gap-2">
               <button type="submit" class="btn btn-primary">Update Book</button>
-              <a href="/books/a/view/1" class="btn btn-outline-secondary"
-                >Cancel</a
-              >
+              <a href="{{ url_for('books.admin_list_books') }}" class="btn btn-outline-secondary">Cancel</a>
             </div>
           </form>
         </div>

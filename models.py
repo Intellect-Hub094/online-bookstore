@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
@@ -34,9 +35,9 @@ class Driver(db.Model):
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    phone = db.Column(db.String(20), nullable=False)  # New field
-    address = db.Column(db.Text, nullable=False)  # New field
-    student_id = db.Column(db.String(50))  # New field
+    phone = db.Column(db.String(20), nullable=False)
+    address = db.Column(db.Text, nullable=False)
+    student_id = db.Column(db.String(50))
     # Add customer-specific fields like address, phone number, etc.
 
     user = db.relationship("User", backref=db.backref("customer", uselist=False))
@@ -65,9 +66,11 @@ class Book(db.Model):
     description = db.Column(db.Text)
     category = db.Column(db.String(50), nullable=False)
     faculty = db.Column(db.String(50), nullable=False)
+    cover_image = db.Column(db.String(255))  # Path to cover image
+    created_at = db.Column(db.DateTime, default=datetime.now)
 
     @staticmethod
-    def get_low_stock_books(threshold=10):  
+    def get_low_stock_books(threshold=10):
         return Book.query.filter(Book.stock <= threshold).all()
 
     def __repr__(self):
@@ -83,15 +86,15 @@ class Order(db.Model):
     status = db.Column(db.String(20), default="pending")
     cancellation_reason = db.Column(db.Text)
     shipping_address = db.Column(db.Text, nullable=False)
-    
+
     customer = db.relationship("Customer", backref="orders")
     user = db.relationship("User", backref="orders")
     order_items = db.relationship("Purchase", backref="order", lazy=True)
-    
+
     @property
     def can_cancel(self):
         return self.status == "pending"
-    
+
     def calculate_total(self):
         return sum(item.subtotal for item in self.order_items)
 
@@ -107,7 +110,7 @@ class Purchase(db.Model):  # OrderItem
     price = db.Column(db.Float, nullable=False)  # Price at the time of purchase
 
     book = db.relationship("Book", backref="purchases")
-    
+
     @property
     def subtotal(self):
         return self.quantity * self.price
@@ -133,7 +136,9 @@ class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey("order.id"), nullable=False)
     payment_method = db.Column(db.String(50), nullable=False)
-    payment_provider = db.Column(db.String(50), nullable=False)  # e.g., "PayFast", "Stripe"
+    payment_provider = db.Column(
+        db.String(50), nullable=False
+    )  # e.g., "PayFast", "Stripe"
     transaction_date = db.Column(db.DateTime, nullable=False)
     amount = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(20), default="pending")
@@ -145,13 +150,14 @@ class Transaction(db.Model):
     @staticmethod
     def create_transaction(order, payment_method, payment_provider):
         from datetime import datetime
+
         transaction = Transaction(
             order_id=order.id,
             payment_method=payment_method,
             payment_provider=payment_provider,
             transaction_date=datetime.utcnow(),
             amount=order.total_amount,
-            status="pending"
+            status="pending",
         )
         return transaction
 

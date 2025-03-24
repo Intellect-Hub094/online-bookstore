@@ -90,6 +90,7 @@ def create_sample_data():
         description="Start building websites and services with ASP.NET Core 9, Blazor, and EF Core 9. Ninth Edition.",
         category="Textbooks",
         faculty="Commerce",
+        cover_image="csharp.jpg"  # Added cover image
     )
 
     book4 = Book(
@@ -102,6 +103,7 @@ def create_sample_data():
         description="Build powerful and reliable Python web applications from scratch. Fifth Edition.",
         category="Textbooks",
         faculty="Commerce",
+        cover_image="django.jpg"
     )
 
     book5 = Book(
@@ -114,6 +116,7 @@ def create_sample_data():
         description="An atypical design patterns guide for .NET 8, C#12, and beyond. Third Edition.",
         category="Textbooks",
         faculty="Commerce",
+        cover_image="aspnet.jpg"
     )
 
     book6 = Book(
@@ -126,6 +129,7 @@ def create_sample_data():
         description="Build websites and services using mature and proven ASP.NET Core MVC, Web API, and Umbraco CMS.",
         category="Textbooks",
         faculty="Commerce",
+        cover_image="realworld.jpg"
     )
 
     book7 = Book(
@@ -138,6 +142,7 @@ def create_sample_data():
         description="A software engineering perspective toward designing real-time systems.",
         category="Textbooks",
         faculty="Commerce",
+        cover_image="realtime.jpg"
     )
 
     book9 = Book(
@@ -150,6 +155,7 @@ def create_sample_data():
         description="Kick-start your career with architecture design principles, strategies, and generative AI techniques. Third Edition.",
         category="Textbooks",
         faculty="Commerce",
+        cover_image="architect.jpg"
     )
 
     book1 = Book(
@@ -162,6 +168,7 @@ def create_sample_data():
         description="Tackle computer science challenges with classic to modern algorithms in machine learning, software design, data systems, and cryptography. Second Edition.",
         category="Textbooks",
         faculty="Commerce",
+        cover_image="algorithms.jpg"
     )
 
     book2 = Book(
@@ -174,6 +181,7 @@ def create_sample_data():
         description="Learn to analyze and mitigate risks in your software projects.",
         category="Textbooks",
         faculty="Commerce",
+        cover_image="security.jpg"
     )
 
     book8 = Book(
@@ -186,6 +194,7 @@ def create_sample_data():
         description="Master advanced Java techniques for cloud-based applications through concurrency and parallelism.",
         category="Textbooks",
         faculty="Computer Science",
+        cover_image="java.jpg"
     )
 
     db.session.add(book1)
@@ -239,7 +248,10 @@ def create_sample_data():
         payment_details={
             "card_last4": "4242",
             "card_brand": "Visa",
-            "payment_id": "pf_123456"
+            "payment_id": "pf_123456",
+            "payment_status": "success",
+            "merchant_id": "10000100",
+            "timestamp": datetime.now().isoformat()
         }
     )
     db.session.add(transaction)
