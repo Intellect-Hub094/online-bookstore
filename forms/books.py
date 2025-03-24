@@ -6,8 +6,7 @@ from wtforms import (
     IntegerField,
     TextAreaField,
     FileField,
-    SelectField,
-    DateField,
+    SelectField
 )
 from wtforms.validators import DataRequired, Length, NumberRange
 
@@ -47,4 +46,3 @@ class BookForm(FlaskForm):
         ],
         validators=[DataRequired(message="Please select a faculty")],
     )
-    publication_date = DateField("Publication Date", format='%Y-%m-%d', validators=[DataRequired()])

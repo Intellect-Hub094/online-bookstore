@@ -74,7 +74,6 @@ def create_book():
             description=form.description.data,
             category=form.category.data,
             faculty=form.faculty.data,
-            publication_date=form.publication_date.data,
             created_at=datetime.now(),
         )
         db.session.add(book)
