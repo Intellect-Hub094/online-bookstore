@@ -1,132 +1,65 @@
-{% extends "components/layout.html" %} {% block content %}
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card shadow">
-        <div class="card-body p-5">
-          <h2 class="text-center mb-4">Add New Book</h2>
-          <form
-            action="/books/a/create/new"
-            method="POST"
-            enctype="multipart/form-data"
-          >
-            <div class="mb-3">
-              <label for="title" class="form-label">Book Title</label>
-              <input
-                type="text"
-                class="form-control"
-                id="title"
-                name="title"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="author" class="form-label">Author</label>
-              <input
-                type="text"
-                class="form-control"
-                id="author"
-                name="author"
-                required
-              />
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="isbn" class="form-label">ISBN</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="isbn"
-                  name="isbn"
-                  required
-                />
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="price" class="form-label">Price</label>
-                <div class="input-group">
-                  <span class="input-group-text">R</span>
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="price"
-                    name="price"
-                    step="0.01"
-                    required
-                  />
+{% extends "components/layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Create a New Book</h3>
                 </div>
-              </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.title.label(class="form-label") }}
+                                {{ form.title(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.author.label(class="form-label") }}
+                                {{ form.author(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.isbn.label(class="form-label") }}
+                                {{ form.isbn(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.price.label(class="form-label") }}
+                                {{ form.price(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.category.label(class="form-label") }}
+                                {{ form.category(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.faculty.label(class="form-label") }}
+                                {{ form.faculty(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            {{ form.stock.label(class="form-label") }}
+                            {{ form.stock(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label") }}
+                            {{ form.description(class="form-control", rows="4") }}
+                        </div>
+                        <div class="mb-4">
+                            {{ form.cover_image.label(class="form-label") }}
+                            {{ form.cover_image(class="form-control") }}
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Create Book</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3">
-              <label for="category" class="form-label">Category</label>
-              <select
-                class="form-select"
-                id="category"
-                name="category"
-                required
-              >
-                <option value="">Select a category</option>
-                <option value="textbook">Textbook</option>
-                <option value="research">Research Paper</option>
-                <option value="journal">Journal</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="faculty" class="form-label">Faculty</label>
-              <select
-                class="form-select"
-                id="faculty"
-                name="faculty"
-                required
-              >
-                <option value="">Select a faculty</option>
-                <option value="engineering">Engineering</option>
-                <option value="science">Science</option>
-                <option value="arts">Arts</option>
-                <option value="commerce">Commerce</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="description" class="form-label">Description</label>
-              <textarea
-                class="form-control"
-                id="description"
-                name="description"
-                rows="4"
-                required
-              ></textarea>
-            </div>
-            <div class="mb-3">
-              <label for="cover" class="form-label">Book Cover Image</label>
-              <input
-                type="file"
-                class="form-control"
-                id="cover"
-                name="cover"
-                accept="image/*"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="stock" class="form-label">Stock Quantity</label>
-              <input
-                type="number"
-                class="form-control"
-                id="stock"
-                name="stock"
-                min="0"
-                required
-              />
-            </div>
-            <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary">Add Book</button>
-              <a href="/books/a/list" class="btn btn-outline-secondary"
-                >Cancel</a
-              >
-            </div>
-          </form>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 {% endblock %}

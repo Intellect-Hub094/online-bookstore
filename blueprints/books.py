@@ -61,13 +61,15 @@ def create_book():
             stock=form.stock.data,
             description=form.description.data,
         )
-        if form.cover_image.data:
-            filename = secure_filename(form.cover_image.data.filename)
-            form.cover_image.data.save(os.path.join("static/uploads", filename))
-            book.cover_image = filename
-
         db.session.add(book)
         db.session.commit()
+
+        if form.cover_image.data:
+            filename = f"{book.id}.jpg"
+            form.cover_image.data.save(os.path.join("static/uploads", filename))
+            book.cover_image = filename
+            db.session.commit()
+
         flash("Book created successfully!", "success")
         return redirect(url_for("books.list_books"))
     return render_template("books/create.html", form=form)
@@ -88,12 +90,6 @@ def admin_required(f):
 def admin_create_book():
     form = BookForm()
     if request.method == "POST":
-        cover_image = request.files.get("cover")
-        filename = None
-        if cover_image:
-            filename = secure_filename(cover_image.filename)
-            cover_image.save(os.path.join(current_app.config["UPLOAD_FOLDER"], filename))
-        
         book = Book(
             title=form.title.data,
             author=form.author.data,
@@ -103,11 +99,18 @@ def admin_create_book():
             description=form.description.data,
             category=form.category.data,
             faculty=form.faculty.data,
-            cover_image=filename,
             created_at=datetime.now()
         )
         db.session.add(book)
         db.session.commit()
+
+        cover_image = request.files.get("cover")
+        if cover_image:
+            filename = f"{book.id}.jpg"
+            cover_image.save(os.path.join(current_app.config["UPLOAD_FOLDER"], filename))
+            book.cover_image = filename
+            db.session.commit()
+
         flash("Book created successfully!", "success")
         return redirect(url_for("books.admin_list_books"))
     return render_template("books/create.html", form=form)
