@@ -1,5 +1,94 @@
-{% extends "components/layout.html" %} {% block content %}
+{% extends "components/layout.html" %}
+{% block content %}
 <div class="container my-5">
-  <h1 class="mb-4">Admin Homepage</h1>
+    <h1 class="mb-4">Admin Dashboard</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Books</h5>
+                    <h2 class="card-text">{{ total_books }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Orders</h5>
+                    <h2 class="card-text">{{ total_orders }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Customers</h5>
+                    <h2 class="card-text">{{ total_customers }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Low Stock Books</h5>
+                    <h2 class="card-text">{{ low_stock_count }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Recent Orders</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recent_orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.user.first_name }} {{ order.user.last_name }}</td>
+                                    <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                                    <td><span class="badge bg-{{ order.status|lower }}">{{ order.status }}</span></td>
+                                    <td>{{ order.order_date.strftime('%Y-%m-%d') }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Low Stock Alert</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for book in low_stock_books %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ book.title }}
+                            <span class="badge bg-danger rounded-pill">{{ book.stock }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

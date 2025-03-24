@@ -11,7 +11,7 @@ auth_bp = Blueprint("auth", __name__)
 
 def _redirect_based_on_role():
     if current_user.role == "admin":
-        return redirect(url_for("admin.index"))
+        return redirect(url_for("admin.admin_index"))
     if current_user.role == "driver":
         return redirect(url_for("orders"))
     if current_user.role == "customer":
