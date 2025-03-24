@@ -1,51 +1,67 @@
-{% extends "components/layout.html" %}
-
-{% block content %}
+{% extends "components/layout.html" %} {% block content %}
 <div class="container mt-4">
-    <h1>Shopping Cart</h1>
-    
-    {% if cart_items %}
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Book</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Subtotal</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in cart_items %}
-                <tr>
-                    <td>{{ item.book.title }}</td>
-                    <td>R{{ "%.2f"|format(item.book.price) }}</td>
-                    <td>{{ item.quantity }}</td>
-                    <td>R{{ "%.2f"|format(item.book.price * item.quantity) }}</td>
-                    <td>
-                        <a href="{{ url_for('cart.edit_cart_item', book_id=item.book_id) }}" class="btn btn-primary btn-sm">Edit</a>
-                        <a href="{{ url_for('cart.delete_from_cart', book_id=item.book_id) }}" class="btn btn-danger btn-sm">Remove</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3" class="text-right"><strong>Total:</strong></td>
-                    <td>R{{ "%.2f"|format(total) }}</td>
-                    <td></td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-    
-    <div class="text-right mt-3">
-        <a href="{{ url_for('checkout.checkout') }}" class="btn btn-success">Proceed to Checkout</a>
-    </div>
-    {% else %}
-    <p>Your cart is empty.</p>
-    <a href="{{ url_for('books.list_books') }}" class="btn btn-primary">Browse Books</a>
-    {% endif %}
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %} {% for category, message in messages %}
+  <div class="alert alert-{{ category }}" role="alert">
+    <p>{{ message }}</p>
+  </div>
+  {% endfor %} {% endif %} {% endwith %}
+  <h1>Shopping Cart</h1>
+
+  {% if cart_items %}
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Book</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Subtotal</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+        <tr>
+          <td>{{ item.book.title }}</td>
+          <td>R{{ "%.2f"|format(item.book.price) }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>R{{ "%.2f"|format(item.book.price * item.quantity) }}</td>
+          <td>
+            <a
+              href="{{ url_for('cart.edit_cart_item', book_id=item.book_id) }}"
+              class="btn btn-primary btn-sm"
+              >Edit</a
+            >
+            <a
+              href="{{ url_for('cart.delete_from_cart', book_id=item.book_id) }}"
+              class="btn btn-danger btn-sm"
+              >Remove</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" class="text-right"><strong>Total:</strong></td>
+          <td>R{{ "%.2f"|format(total) }}</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="text-right mt-3">
+    <a href="{{ url_for('checkout.checkout') }}" class="btn btn-success"
+      >Proceed to Checkout</a
+    >
+  </div>
+  {% else %}
+  <p>Your cart is empty.</p>
+  <a href="{{ url_for('books.list_books') }}" class="btn btn-primary"
+    >Browse Books</a
+  >
+  {% endif %}
 </div>
 {% endblock %}
