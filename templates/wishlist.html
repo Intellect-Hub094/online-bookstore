@@ -1,5 +1,11 @@
 {% extends "components/layout.html" %} {% block content %}
 <div class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %} {% for category, message in messages %}
+  <div class="alert alert-{{ category }}" role="alert">
+    <p>{{ message }}</p>
+  </div>
+  {% endfor %} {% endif %} {% endwith %}
   <h1 class="text-center my-4">My Wishlist</h1>
 
   {% if wishlist_items %}

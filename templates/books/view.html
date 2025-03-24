@@ -1,5 +1,12 @@
 {% extends "components/layout.html" %} {% block content %}
 <div class="container mt-4">
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %} {% for category, message in messages %}
+  <div class="alert alert-{{ category }}" role="alert">
+    <p>{{ message }}</p>
+  </div>
+  {% endfor %} {% endif %} {% endwith %}
+
   <div class="row">
     <div class="col-md-4">
       <img
@@ -17,12 +24,24 @@
       <p>{{ book.description }}</p>
 
       {% if current_user.is_authenticated %}
+      <form
+        action="{{ url_for('cart.add_to_cart', book_id=book.id) }}"
+        method="POST"
+        class="mb-3"
+      >
+        <div class="input-group" style="max-width: 200px">
+          <input
+            type="number"
+            name="quantity"
+            class="form-control"
+            value="1"
+            min="1"
+            max="{{ book.stock }}"
+          />
+          <button type="submit" class="btn btn-primary">Add to Cart</button>
+        </div>
+      </form>
       <div class="btn-group gap-2" role="group">
-        <a
-          href="{{ url_for('cart.add_to_cart', book_id=book.id) }}"
-          class="btn btn-primary"
-          >Add to Cart</a
-        >
         {% if book.id in wishlist_book_ids %}
         <a
           href="{{ url_for('wishlist.remove_from_wishlist', book_id=book.id) }}"
