@@ -3,7 +3,9 @@
 {% block content %}
 <div class="container mt-4">
     {% if current_user.is_authenticated %}
+    {% if current_user.is_admin %}
     <a href="{{ url_for('books.create_book') }}" class="btn btn-primary mb-3">Add New Book</a>
+    {% endif %}
     {% endif %}
 
     <!-- Search and Filter -->
