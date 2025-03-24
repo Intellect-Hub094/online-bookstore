@@ -59,7 +59,7 @@ def inject_user():
 @app.route("/")
 def index():
     books = Book.query.all()
-    book_indices = [i for i in range(0, 10)]
+    book_indices = [i for i in range(0, 9)]
     return render_template("index.html", book_indices=book_indices, books=books)
 
 

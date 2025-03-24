@@ -113,7 +113,7 @@ def create_sample_data():
         price=27.99,
         stock=80,
         description="Build websites and services using mature and proven ASP.NET Core MVC, Web API, and Umbraco CMS.",
-        category="Textbooks",        
+        category="Textbooks",
         faculty="Commerce",
     )
 
@@ -137,18 +137,6 @@ def create_sample_data():
         price=44.99,
         stock=55,
         description="Kick-start your career with architecture design principles, strategies, and generative AI techniques. Third Edition.",
-        category="Textbooks",
-        faculty="Commerce",
-    )
-
-    book0 = Book(
-        id="0",
-        title="Hands-On Software Engineering with Python",
-        author="Brian Allbee",
-        isbn="ISBN010",
-        price=24.99,
-        stock=65,
-        description="Move beyond basic programming and construct reliable and efficient software with complex code.",
         category="Textbooks",
         faculty="Commerce",
     )
@@ -177,6 +165,18 @@ def create_sample_data():
         faculty="Commerce",
     )
 
+    book8 = Book(
+        id="8",
+        title="Java Concurrency and Parallelism",
+        author="Jay Wang",
+        isbn="ISBN013",
+        price=35.99,
+        stock=50,
+        description="Master advanced Java techniques for cloud-based applications through concurrency and parallelism.",
+        category="Textbooks",
+        faculty="Computer Science",
+    )
+
     db.session.add(book1)
     db.session.add(book2)
     db.session.add(book3)
@@ -184,6 +184,7 @@ def create_sample_data():
     db.session.add(book5)
     db.session.add(book6)
     db.session.add(book7)
+    db.session.add(book8)
     db.session.add(book9)
     db.session.commit()
 
