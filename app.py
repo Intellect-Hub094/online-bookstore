@@ -3,7 +3,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 
 from config import Config
-from models import db, User
+from models import db, Book, User
 
 from blueprints.auth import auth_bp
 from blueprints.admin import admin_bp
@@ -58,7 +58,9 @@ def inject_user():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    books = Book.query.all()
+    book_indices = [i for i in range(0, 10)]
+    return render_template("index.html", book_indices=book_indices, books=books)
 
 
 @app.route("/terms-and-conditions")

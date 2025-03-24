@@ -2,8 +2,6 @@ from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from forms import ProfileForm
-from models import db, Order
-from utils import _clear_flashes
 
 profile_bp = Blueprint("profile", __name__)
 
@@ -23,14 +21,6 @@ def profile():
                 pass
             else:
                 current_user.password = generate_password_hash(form.password.data)
-
-        db.session.commit()
         flash("Profile updated successfully!", "success")
         return redirect(url_for("profile.profile"))
-
-    orders = (
-        Order.query.filter_by(customer_id=current_user.id)
-        .order_by(Order.order_date.desc())
-        .all()
-    )
-    return render_template("profile.html", form=form, orders=orders)
+    return render_template("profile.html", form=form)
