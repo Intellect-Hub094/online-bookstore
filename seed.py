@@ -77,6 +77,8 @@ def create_sample_data():
         price=29.99,
         stock=75,
         description="Start building websites and services with ASP.NET Core 9, Blazor, and EF Core 9. Ninth Edition.",
+        category="Textbooks",
+        faculty="Commerce",
     )
 
     book4 = Book(
@@ -87,6 +89,8 @@ def create_sample_data():
         price=34.99,
         stock=60,
         description="Build powerful and reliable Python web applications from scratch. Fifth Edition.",
+        category="Textbooks",
+        faculty="Commerce",
     )
 
     book5 = Book(
@@ -97,6 +101,8 @@ def create_sample_data():
         price=39.99,
         stock=45,
         description="An atypical design patterns guide for .NET 8, C#12, and beyond. Third Edition.",
+        category="Textbooks",
+        faculty="Commerce",
     )
 
     book6 = Book(
@@ -107,6 +113,8 @@ def create_sample_data():
         price=27.99,
         stock=80,
         description="Build websites and services using mature and proven ASP.NET Core MVC, Web API, and Umbraco CMS.",
+        category="Textbooks",        
+        faculty="Commerce",
     )
 
     book7 = Book(
@@ -117,6 +125,8 @@ def create_sample_data():
         price=49.99,
         stock=30,
         description="A software engineering perspective toward designing real-time systems.",
+        category="Textbooks",
+        faculty="Commerce",
     )
 
     book9 = Book(
@@ -127,6 +137,8 @@ def create_sample_data():
         price=44.99,
         stock=55,
         description="Kick-start your career with architecture design principles, strategies, and generative AI techniques. Third Edition.",
+        category="Textbooks",
+        faculty="Commerce",
     )
 
     book0 = Book(
@@ -137,6 +149,8 @@ def create_sample_data():
         price=24.99,
         stock=65,
         description="Move beyond basic programming and construct reliable and efficient software with complex code.",
+        category="Textbooks",
+        faculty="Commerce",
     )
 
     book1 = Book(
@@ -147,6 +161,8 @@ def create_sample_data():
         price=32.99,
         stock=70,
         description="Tackle computer science challenges with classic to modern algorithms in machine learning, software design, data systems, and cryptography. Second Edition.",
+        category="Textbooks",
+        faculty="Commerce",
     )
 
     book2 = Book(
@@ -157,6 +173,8 @@ def create_sample_data():
         price=22.99,
         stock=40,
         description="Learn to analyze and mitigate risks in your software projects.",
+        category="Textbooks",
+        faculty="Commerce",
     )
 
     db.session.add(book1)

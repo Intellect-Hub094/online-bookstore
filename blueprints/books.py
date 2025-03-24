@@ -10,7 +10,29 @@ books_bp = Blueprint("books", __name__)
 
 @books_bp.route("/")
 def list_books():
-    books = Book.query.all()
+    search_query = request.args.get("search", "")
+    category = request.args.get("category", "")
+    sort_by = request.args.get("sort_by", "")
+    faculty = request.args.get("faculty", "")
+
+    books = Book.query
+
+    if search_query:
+        books = books.filter(Book.title.ilike(f"%{search_query}%"))
+    if category:
+        books = books.filter(Book.category == category)
+    if faculty:
+        books = books.filter(Book.faculty == faculty)
+
+    if sort_by == "price_asc":
+        books = books.order_by(Book.price.asc())
+    elif sort_by == "price_desc":
+        books = books.order_by(Book.price.desc())
+    elif sort_by == "newest":
+        books = books.order_by(Book.id.desc())
+
+    books = books.all()
+
     return render_template("books/list.html", books=books)
 
 

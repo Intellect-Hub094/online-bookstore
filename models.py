@@ -57,7 +57,8 @@ class Book(db.Model):
     price = db.Column(db.Float, nullable=False)
     stock = db.Column(db.Integer, default=0)
     description = db.Column(db.Text)
-    # Add other book-related fields like publication date, genre, etc.
+    category = db.Column(db.String(50), nullable=False)
+    faculty = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):
         return f"<Book {self.title}>"

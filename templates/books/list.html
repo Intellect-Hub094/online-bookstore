@@ -6,13 +6,50 @@
     {% if current_user.is_authenticated and current_user.is_admin %}
     <a href="{{ url_for('books.create_book') }}" class="btn btn-primary mb-3">Add New Book</a>
     {% endif %}
-    
+
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form class="row g-3" method="get" action="{{ url_for('books.list_books') }}">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="search" placeholder="Search books..." value="{{ request.args.get('search', '') }}">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="category">
+                        <option value="">Category</option>
+                        <option value="Textbooks" {% if request.args.get('category') == 'Textbooks' %}selected{% endif %}>Textbooks</option>
+                        <option value="Research Papers" {% if request.args.get('category') == 'Research Papers' %}selected{% endif %}>Research Papers</option>
+                        <option value="Journals" {% if request.args.get('category') == 'Journals' %}selected{% endif %}>Journals</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="faculty">
+                        <option value="">Faculty</option>
+                        <option value="Engineering" {% if request.args.get('faculty') == 'Engineering' %}selected{% endif %}>Engineering</option>
+                        <option value="Science" {% if request.args.get('faculty') == 'Science' %}selected{% endif %}>Science</option>
+                        <option value="Arts" {% if request.args.get('faculty') == 'Arts' %}selected{% endif %}>Arts</option>
+                        <option value="Commerce" {% if request.args.get('faculty') == 'Commerce' %}selected{% endif %}>Commerce</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="sort_by">
+                        <option value="">Sort by</option>
+                        <option value="price_asc" {% if request.args.get('sort_by') == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                        <option value="price_desc" {% if request.args.get('sort_by') == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                        <option value="newest" {% if request.args.get('sort_by') == 'newest' %}selected{% endif %}>Newest First</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="row">
-        {% from 'components/book_card.html' import book_card %} {% for book in books
-        %}
+        {% from 'components/book_card.html' import book_card %} {% for book in books %}
         <div class="col-md-4 mb-4">{{ book_card(book) }}</div>
         {% endfor %}
-      </div>
     </div>
 </div>
 {% endblock %}
