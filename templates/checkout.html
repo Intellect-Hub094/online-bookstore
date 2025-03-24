@@ -1,40 +1,47 @@
-{% extends "components/layout.html" %}
-{% block content %}
+{% extends "components/layout.html" %} {% block content %}
 <div class="container py-4">
-    <h1 class="text-center mb-4">Checkout</h1>
-    
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Order Summary</h5>
-                </div>
-                <div class="card-body">
-                    {% for item in cart_items %}
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>{{ item.book.title }} (x{{ item.quantity }})</span>
-                        <span>R{{ "%.2f"|format(item.book.price * item.quantity) }}</span>
-                    </div>
-                    {% endfor %}
-                    <hr>
-                    <div class="d-flex justify-content-between">
-                        <strong>Total:</strong>
-                        <strong>R{{ "%.2f"|format(total) }}</strong>
-                    </div>
-                </div>
-            </div>
+  <h1 class="text-center mb-4">Checkout</h1>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Order Summary</h5>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <form action="{{ url_for('checkout.process_checkout') }}" method="POST">
-                        <button type="submit" class="btn btn-primary w-100">
-                            Proceed to Payment
-                        </button>
-                    </form>
-                </div>
-            </div>
+        <div class="card-body">
+          {% for item in cart_items %}
+          <div class="d-flex justify-content-between mb-2">
+            <span>{{ item.book.title }} (x{{ item.quantity }})</span>
+            <span>R{{ "%.2f"|format(item.book.price * item.quantity) }}</span>
+          </div>
+          {% endfor %}
+          <hr />
+          <div class="d-flex justify-content-between">
+            <strong>Total:</strong>
+            <strong>R{{ "%.2f"|format(total) }}</strong>
+          </div>
         </div>
+      </div>
     </div>
+    <div class="col-md-4">
+      <div class="card bg-light">
+        <div class="card-body">
+          <form
+            action="{{ url_for('checkout.process_checkout') }}"
+            method="POST"
+          >
+            <img
+              src="{{ url_for('static', filename='img/payFast-logo.svg') }}"
+              alt="PayFast"
+              class="img-fluid mb-4 w-50 mx-auto d-block"
+            />
+            <button type="submit" class="btn btn-primary w-100">
+              Proceed to Payment
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
