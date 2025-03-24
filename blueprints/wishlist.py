@@ -18,7 +18,7 @@ def view_wishlist():
 def get_wishlist_book_ids():
     """Helper function to get list of book IDs in user's wishlist"""
     if current_user.is_authenticated:
-        if current_user.role == "customer":
+        if current_user.role == "customer" and current_user.customer:
             return [
                 item.book_id
                 for item in Wishlist.query.filter_by(
