@@ -43,8 +43,9 @@ def login():
             if next_page:
                 return redirect(next_page)
 
-            _redirect_based_on_role()
-        flash("Invalid email or password")
+            return _redirect_based_on_role()
+        else:
+            flash("Invalid email or password")
     else:
         for field, errors in form.errors.items():
             for error in errors:
