@@ -38,6 +38,11 @@ def login():
         if user and check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
             _clear_flashes()
+
+            next_page = request.args.get("next")
+            if next_page:
+                return redirect(next_page)
+
             _redirect_based_on_role()
         flash("Invalid email or password")
     else:

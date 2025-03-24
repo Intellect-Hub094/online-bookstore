@@ -21,7 +21,7 @@
                 <tr>
                     <td>#{{ order.id }}</td>
                     <td>{{ order.order_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                    <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                    <td>R{{ "%.2f"|format(order.total_amount) }}</td>
                     <td>{{ order.status }}</td>
                     <td>
                         <a href="{{ url_for('orders.view_order', order_id=order.id) }}" 
