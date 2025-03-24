@@ -161,6 +161,12 @@ def create_sample_data():
 
     db.session.add(book1)
     db.session.add(book2)
+    db.session.add(book3)
+    db.session.add(book4)
+    db.session.add(book5)
+    db.session.add(book6)
+    db.session.add(book7)
+    db.session.add(book9)
     db.session.commit()
 
     # Create sample carts

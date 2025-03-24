@@ -1,9 +1,9 @@
+import os
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from models import Book, db
 from forms.books import BookForm
-import os
 
 books_bp = Blueprint("books", __name__)
 
@@ -21,7 +21,7 @@ def view_book(book_id):
 
 
 @books_bp.route("/create", methods=["GET", "POST"])
-# @login_required
+@login_required
 def create_book():
     form = BookForm()
     if form.validate_on_submit():

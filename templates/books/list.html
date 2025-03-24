@@ -8,11 +8,11 @@
     {% endif %}
     
     <div class="row">
-        {% for book in books %}
-        <div class="col-md-4 mb-4">
-            {% include "components/book_card.html" %}
-        </div>
+        {% from 'components/book_card.html' import book_card %} {% for book in books
+        %}
+        <div class="col-md-4 mb-4">{{ book_card(book) }}</div>
         {% endfor %}
+      </div>
     </div>
 </div>
 {% endblock %}
