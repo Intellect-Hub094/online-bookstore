@@ -210,20 +210,39 @@ def create_sample_data():
     # Create sample orders and purchases
     order = Order(
         customer_id=customer.id,
-        user_id=customer_user.id,  # New field
+        user_id=customer_user.id,
         order_date=datetime.now(),
-        total_amount=36.97,
+        total_amount=5702.97,  # Updated amount
         status="pending",
-        cancellation_reason=None,  # New field
+        shipping_address=customer.address,  # Use customer's address
+        cancellation_reason=None,
     )
     db.session.add(order)
     db.session.commit()
 
-    purchase1 = Purchase(order_id=order.id, book_id=book1.id, quantity=2, price=1000.99)
-    purchase2 = Purchase(order_id=order.id, book_id=book2.id, quantity=1, price=1500.99)
+    purchase1 = Purchase(order_id=order.id, book_id=book1.id, quantity=1, price=3200.99)
+    purchase2 = Purchase(order_id=order.id, book_id=book2.id, quantity=1, price=2200.99)
 
     db.session.add(purchase1)
     db.session.add(purchase2)
+    db.session.commit()
+
+    # Create sample transactions with new fields
+    transaction = Transaction(
+        order_id=order.id,
+        payment_method="Credit Card",
+        payment_provider="PayFast",
+        transaction_date=datetime.now(),
+        amount=order.total_amount,
+        status="completed",
+        reference_number="PAY-2024-001",
+        payment_details={
+            "card_last4": "4242",
+            "card_brand": "Visa",
+            "payment_id": "pf_123456"
+        }
+    )
+    db.session.add(transaction)
     db.session.commit()
 
     # Create sample wishlists
@@ -232,18 +251,6 @@ def create_sample_data():
     )
     db.session.add(wishlist_item)
     db.session.commit()
-
-    # Create sample transactions
-    transaction = Transaction(
-        order_id=order.id,
-        payment_method="Credit Card",
-        transaction_date=datetime.now(),
-        amount=36.97,
-        status="completed",
-    )
-    db.session.add(transaction)
-    db.session.commit()
-
 
 if __name__ == "__main__":
     with app.app_context():
