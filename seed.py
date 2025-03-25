@@ -38,22 +38,22 @@ def create_sample_data():
     admin_user = User(
         first_name="Admin",
         last_name="User",
-        email="admin@example.com",
-        password=generate_password_hash("adminpass"),
+        email="22328765@dut4life.ac.za",
+        password=generate_password_hash("22328765"),
         role="admin",
     )
     customer_user = User(
         first_name="Customer",
         last_name="User",
-        email="customer@example.com",
-        password=generate_password_hash("customerpass"),
+        email="21634436@dut4life.ac.za",
+        password=generate_password_hash("21634436"),
         role="customer",
     )
     driver_user = User(
         first_name="Driver",
         last_name="User",
-        email="driver@example.com",
-        password=generate_password_hash("driverpass"),
+        email="22232298@dut4life.ac.za",
+        password=generate_password_hash("22232298"),
         role="driver",
     )
     incomplete_customer_user = User(
