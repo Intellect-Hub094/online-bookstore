@@ -64,19 +64,20 @@ def logout():
 @role_based_redirect
 def register():
     form = RegistrationForm()
+    role = request.args.get("role") or "customer"
     if form.validate_on_submit():
         user = User(
             email=form.email.data,
             password=generate_password_hash(form.password.data),
             first_name=form.first_name.data,
             last_name=form.last_name.data,
-            role=request.args.get("role") or "customer",
+            role=role,
         )
         db.session.add(user)
         db.session.commit()
         _clear_flashes()
         flash("Registration successful. Please login.")
-        return redirect(url_for("auth.login"))
+        return redirect(url_for("auth.login", role=user.role))
     else:
         for field, errors in form.errors.items():
             for error in errors:
