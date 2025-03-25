@@ -1,49 +1,56 @@
-{% extends "components/layout.html" %}
-
-{% block content %}
+{% extends "components/layout.html" %} {% block content %}
 <div class="container mt-4">
-    <h1>{% if current_user.role in ['admin', 'driver'] %}All Orders{% else %}My Orders{% endif %}</h1>
-    
-    {% if orders %}
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Date</th>
-                    {% if current_user.role in ['admin', 'driver'] %}
-                    <th>Customer</th>
-                    {% endif %}
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
-                <tr>
-                    <td>#{{ order.id }}</td>
-                    <td>{{ order.order_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                    {% if current_user.role in ['admin', 'driver'] %}
-                    <td>{{ order.user.email }}</td>
-                    {% endif %}
-                    <td>R{{ "%.2f"|format(order.total_amount) }}</td>
-                    <td>{{ order.status }}</td>
-                    <td>
-                        <a href="{{ url_for('orders.view_order', order_id=order.id) }}" 
-                           class="btn btn-info btn-sm">View</a>
-                        {% if current_user.role == 'admin' %}
-                        <a href="{{ url_for('orders.edit_order', order_id=order.id) }}" 
-                           class="btn btn-primary btn-sm">Edit</a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-    <p>No orders found.</p>
-    {% endif %}
+  <h1>
+    {% if current_user.role in ['admin', 'driver'] %}All Orders{% else %}My
+    Orders{% endif %}
+  </h1>
+
+  {% if orders %}
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Date</th>
+          {% if current_user.role in ['admin', 'driver'] %}
+          <th>Customer</th>
+          {% endif %}
+          <th>Total</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td>#{{ order.id }}</td>
+          <td>{{ order.order_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          {% if current_user.role in ['admin', 'driver'] %}
+          <td>{{ order.user.email }}</td>
+          {% endif %}
+          <td>R{{ "%.2f"|format(order.total_amount) }}</td>
+          <td>{{ order.status }}</td>
+          <td>
+            <a
+              href="{{ url_for('orders.view_order', order_id=order.id) }}"
+              class="btn btn-info btn-sm"
+              >View</a
+            >
+            {% if current_user.role in ['admin', 'driver'] %}
+            <a
+              href="{{ url_for('orders.edit_order', order_id=order.id) }}"
+              class="btn btn-primary btn-sm"
+              >Edit</a
+            >
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p>No orders found.</p>
+  {% endif %}
 </div>
 {% endblock %}
