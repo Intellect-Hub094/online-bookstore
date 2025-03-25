@@ -38,15 +38,21 @@ def view_order(order_id):
 @orders_bp.route("/<int:order_id>/edit", methods=["GET", "POST"])
 @login_required
 def edit_order(order_id):
-    if current_user.role != "admin":
+    if current_user.role not in ["admin", "driver"]:
         flash("Unauthorized access", "error")
         return redirect(url_for("orders.list_orders"))
 
     order = Order.query.get_or_404(order_id)
     if request.method == "POST":
-        order.status = request.form.get("status")
+        new_status = request.form.get("status")
+        # Only allow specific status transitions for drivers
+        if current_user.role == "driver" and new_status not in ["shipped", "delivered"]:
+            flash("You can only update orders to shipped or delivered status", "error")
+            return redirect(url_for("orders.edit_order", order_id=order.id))
+        
+        order.status = new_status
         db.session.commit()
-        flash("Order updated successfully", "success")
+        flash("Order status updated successfully", "success")
         return redirect(url_for("orders.view_order", order_id=order.id))
 
     return render_template("orders/edit.html", order=order)

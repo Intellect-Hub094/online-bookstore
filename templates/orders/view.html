@@ -49,8 +49,8 @@
     </div>
     
     <div class="mt-4">
-        {% if current_user.role == 'admin' %}
-        <a href="{{ url_for('orders.edit_order', order_id=order.id) }}" class="btn btn-primary">Edit Order</a>
+        {% if current_user.role in ['admin', 'driver'] %}
+        <a href="{{ url_for('orders.edit_order', order_id=order.id) }}" class="btn btn-primary">Update Status</a>
         {% endif %}
         <a href="{{ url_for('orders.list_orders') }}" class="btn btn-secondary">Back to Orders</a>
     </div>
