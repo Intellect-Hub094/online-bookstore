@@ -61,7 +61,7 @@
                                 <tr>
                                     <td>#{{ order.id }}</td>
                                     <td>{{ order.user.first_name }} {{ order.user.last_name }}</td>
-                                    <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                                    <td>R{{ "%.2f"|format(order.total_amount) }}</td>
                                     <td><span class="badge bg-{{ order.status|lower }}">{{ order.status }}</span></td>
                                     <td>{{ order.order_date.strftime('%Y-%m-%d') }}</td>
                                 </tr>
